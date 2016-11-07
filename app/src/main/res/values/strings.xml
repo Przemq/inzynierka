@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Dijkstra</string>
+    <string name="download_data">Pobieram dane..</string>
+</resources>

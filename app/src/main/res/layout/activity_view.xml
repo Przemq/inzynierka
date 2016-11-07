@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/mainViewLayout"
+    android:weightSum="10">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/viewLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="7">
+
+    <view.DijkstraAlgorithmView
+        android:id="@+id/drawView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+         />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:id="@+id/navigationLayout"
+        android:layout_width="match_parent"
+        android:layout_height="202dp"
+        android:layout_weight="3"
+        android:background="@color/navBG"
+        android:weightSum="1">
+
+        <TextView
+            android:text="Floor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="23dp"
+            android:layout_marginStart="23dp"
+            android:layout_marginTop="17dp"
+            android:id="@+id/textView5" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="30dp"
+            android:layout_marginEnd="30dp"
+            android:background="@drawable/ic_action_up"
+            android:id="@+id/button_up" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignLeft="@+id/button_up"
+            android:layout_alignStart="@+id/button_up"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/ic_action_ndown"
+            android:id="@+id/button_down" />
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/textView5"
+            android:layout_toRightOf="@+id/textView5"
+            android:layout_toEndOf="@+id/textView5"
+            android:layout_marginLeft="36dp"
+            android:layout_marginStart="36dp"
+            android:id="@+id/tv_floor" />
+    </RelativeLayout>
+
+</LinearLayout>
