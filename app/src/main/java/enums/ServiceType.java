@@ -16,7 +16,7 @@ public enum ServiceType {
             case CHECK_VERSION:
                 return SERVER_PATH + "checkVersion.php";
             case ADD_FICHE:
-                return SERVER_PATH + "addFiche.php";
+                return SERVER_PATH + "upDateDatabase.php";
         }
         return "Service path is invalid";
     }
