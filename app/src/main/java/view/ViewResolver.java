@@ -11,20 +11,22 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import algorithm.DijkstraAlgorithm;
+import domain.Point;
 
 /**
  * Created by Przemek on 03.05.2016.
  */
-public class DijkstraAlgorithmView extends View {
+public class ViewResolver extends View {
     private DijkstraAlgorithm dijkstraAlgorithm;
     private Paint paint = new Paint();
-    private ArrayList<Point> points;
+    private static ArrayList<Point> points;
     private LinkedList<Point> clickedPoints = new LinkedList<>();
     private int[] path;
     private Point source;
     private Point destination;
     private boolean isMiddleSource = false;
     private int[][] verticesPositions;
+    private  String name;
 
     private int floor = 1;
 
@@ -48,17 +50,17 @@ public class DijkstraAlgorithmView extends View {
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 2, 0}};
 
 
-    public DijkstraAlgorithmView(Context context) {
+    public ViewResolver(Context context) {
         super(context);
         onConstructor();
     }
 
-    public DijkstraAlgorithmView(Context context, AttributeSet attrs) {
+    public ViewResolver(Context context, AttributeSet attrs) {
         super(context, attrs);
         onConstructor();
     }
 
-    public DijkstraAlgorithmView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ViewResolver(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         onConstructor();
     }
@@ -95,7 +97,8 @@ public class DijkstraAlgorithmView extends View {
                 {570, 620}};
 
         createPointsArray();
-        setDijkstraTemporaryPointsPositions(0,1);
+        setSource(5);
+        setDestination(2);
 
 
         dijkstraAlgorithm = new DijkstraAlgorithm(source.getId(), destination.getId());
@@ -105,20 +108,14 @@ public class DijkstraAlgorithmView extends View {
 
     public void createPointsArray(){
         for (int i = 0; i < verticesPositions.length; i++) {
+            name = "A" + String.valueOf(i);
             int tempFloor = 1;
             if (i > 5) tempFloor = 2;
             if(i>10) tempFloor = 3;
-                points.add(new Point(getContext(), i, verticesPositions[i][0], verticesPositions[i][1], tempFloor, isMiddleSource));
+                points.add(new Point(getContext(), i,name, verticesPositions[i][0], verticesPositions[i][1], tempFloor, isMiddleSource));
         }
     }
 
-    public void setDijkstraTemporaryPointsPositions(int tempSource, int tempDestination ){
-
-        if (source == null && destination == null) {
-            source = points.get(tempSource);
-            destination = points.get(tempDestination);
-        }
-    }
     public void drawPoints(Canvas canvas) {
         for (Point point : points) {
             if (point.getFloor() == floor)
@@ -174,16 +171,32 @@ public class DijkstraAlgorithmView extends View {
         }
     }
 
-    public void setSource(Point source) {
-        this.source = source;
+    public void setSource(int sourceId) {
+        if (source == null)
+        this.source = points.get(sourceId);
+        invalidate();
     }
 
+    public void setDestination(int destinationId) {
+        if (destination == null)
+        this.destination = points.get(destinationId);
+        invalidate();
+    }
+
+    public static ArrayList<Integer> getPointsId(){
+        ArrayList pointsId = new ArrayList();
+        for (Point point : points){
+            pointsId.add(point.getId());
+        }
+        return  pointsId;
+    }
 
     @Override
     public void onDraw(Canvas canvas) {
         drawPoints(canvas);
         //drawConnectionsBetweenPoints(canvas);
         drawConnections(canvas, path);
+        System.out.println("S: "+source.getId()+ "  D: " + destination.getId());
         // showArrayToDrawConnections(createArrayToDrawConnections(path));
     }
 }

@@ -9,11 +9,6 @@ import android.os.Bundle;
 
 import com.inz.przemek.dijkstra.R;
 
-import enums.ServiceType;
-
-import server.Parameters;
-import server.ServerRequest;
-
 /**
  * Created by Przemek on 11.10.2016.
  */
@@ -27,9 +22,9 @@ public class SplashActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         toMainActivity = new Intent(this,MainActivity.class);
+        startActivity(toMainActivity);
 
-
-        if(isNetworkAvailable()){
+       /* if(isNetworkAvailable()){
             new ServerRequest(ServiceType.GET_DATABASE, new Parameters()).setServerRequestListener(new ServerRequest.ServerRequestListener() {
                 @Override
                 public void onSuccess(String json) {
@@ -43,7 +38,7 @@ public class SplashActivity extends Activity {
                 }
 
             }).execute();
-        }
+        }*/
     }
 
     private boolean isNetworkAvailable() {
