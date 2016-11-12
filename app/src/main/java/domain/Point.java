@@ -6,10 +6,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.View;
 
-import com.inz.przemek.dijkstra.R;
-
-import view.MyPaint;
-
 /**
  * Created by Przemek on 31.05.2016.
  */
@@ -18,24 +14,16 @@ public class Point extends View {
     private int floor;
     private boolean isMiddleSource;
     private String name;
+    public static final float EDGE_WIDTH = 3f;
+    public static final boolean ANTII_ALIAS = true;
+    public static final float TEXT_SIZE = 25f;
+    public static final float RADIUS = 10f;
 
-
-
-    public void setMiddleSource(boolean middleSource) {
-        isMiddleSource = middleSource;
-    }
-
-    public boolean isMiddleSource() {
-
-        return isMiddleSource;
-    }
-
-    public static float radius = 10;
     private boolean isSelected;
-    MyPaint paint;
-    Paint textPaint;
-
-
+    Paint pointStyle;
+    Paint textStyle;
+    Paint pointStyleSelected;
+    Paint pointStyleNormal;
 
     public Point(Context context, int id, String name, float xPosition, float yPosition, int floor, boolean isMiddleSource) {
         super(context);
@@ -45,12 +33,35 @@ public class Point extends View {
         this.floor = floor;
         this.isMiddleSource = isMiddleSource;
         this.name = name;
-        paint = new MyPaint(Color.BLUE, 3, Paint.Cap.ROUND, true, Paint.Style.STROKE);
 
-        textPaint = new Paint();
-        textPaint.setColor(Color.DKGRAY);
-        textPaint.setTextSize(25);
-        textPaint.setTextAlign(Paint.Align.CENTER);
+        initializePaintStyle();
+    }
+
+    public void initializePaintStyle(){
+        pointStyle = new Paint();
+
+        pointStyleNormal = new Paint();
+        pointStyleNormal.setColor(Color.BLUE);
+        pointStyleNormal.setStrokeWidth(EDGE_WIDTH);
+        pointStyleNormal.setAntiAlias(ANTII_ALIAS);
+        pointStyleNormal.setStyle(Paint.Style.STROKE);
+
+        textStyle = new Paint();
+        textStyle.setColor(Color.DKGRAY);
+        textStyle.setTextSize(TEXT_SIZE);
+        textStyle.setTextAlign(Paint.Align.CENTER);
+
+        pointStyleSelected = new Paint();
+        pointStyleSelected.setColor(Color.RED);
+        pointStyleSelected.setStrokeWidth(EDGE_WIDTH);
+        pointStyleSelected.setAntiAlias(ANTII_ALIAS);
+        pointStyleSelected.setStyle(Paint.Style.STROKE);
+
+        pointStyle.setColor(Color.BLUE);
+        pointStyle.setStrokeWidth(EDGE_WIDTH);
+        pointStyle.setAntiAlias(ANTII_ALIAS);
+        pointStyle.setStyle(Paint.Style.STROKE);
+
     }
 
     public boolean isSelected() {
@@ -58,13 +69,22 @@ public class Point extends View {
     }
 
     public void setSelected(boolean selected) {
-        isSelected = selected;
+       this.isSelected = selected;
         if(isSelected){
-            paint = new MyPaint(getResources().getColor(R.color.pointSelected), 3, Paint.Cap.ROUND, true, Paint.Style.STROKE);
-            System.out.println("Koloruję");
+            pointStyle = pointStyleSelected;
+            System.out.println("Koloruję na czerwono");
         }else{
-            paint = new MyPaint(Color.BLUE, 3, Paint.Cap.ROUND, true, Paint.Style.STROKE);
+            pointStyle = pointStyleNormal;
         }
+    }
+
+    public void setMiddleSource(boolean middleSource) {
+        isMiddleSource = middleSource;
+    }
+
+    public boolean isMiddleSource() {
+
+        return isMiddleSource;
     }
 
     public int getId() {
@@ -90,7 +110,7 @@ public class Point extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawCircle(getX(), getY(), radius, paint.createPaint());
-        canvas.drawText(String.valueOf(name), getX() + 3 * radius, getY() + radius, textPaint);
+        canvas.drawCircle(getX(), getY(), RADIUS, pointStyle);
+        canvas.drawText(name, getX() + 3 * RADIUS, getY() + RADIUS, textStyle);
     }
 }

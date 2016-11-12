@@ -90,7 +90,7 @@ public class ViewActivity extends Activity {
         if(event.getAction() == MotionEvent.ACTION_DOWN){
             System.out.println(event.getX()+" : "+event.getY());
             if(event.getY() < viewResolver.getHeight())
-           viewResolver.detectTouchedPoint(event.getX(),event.getY() - viewResolver.getY());
+            viewResolver.detectTouchedPoint(event.getX(),event.getY() - viewResolver.getY());
         }
         return super.onTouchEvent(event);
     }

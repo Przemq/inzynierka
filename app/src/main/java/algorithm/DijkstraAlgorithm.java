@@ -87,7 +87,7 @@ public class DijkstraAlgorithm {
 
 
         }
-        printSolution(distance, sourceVertex);
+       // printSolution(distance, sourceVertex);
         pathReconstruction(previous,sourceVertex,destinationVertex);
         return previous;
     }

@@ -26,17 +26,17 @@ public class ViewResolver extends View {
     private Point destination;
     private boolean isMiddleSource = false;
     private int[][] verticesPositions;
-    private  String name;
+    private String name;
 
     private int floor = 1;
 
     int[][] graph = new int[][]{
             {0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {3, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {3, 2, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {3, 2, 0, 5, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 2, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 4, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 4, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 2, 7, 0, 4, 0, 3, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 8, 4, 0, 8, 7, 0, 0, 0, 0, 0, 0},
@@ -44,7 +44,7 @@ public class ViewResolver extends View {
             {0, 0, 0, 0, 0, 0, 0, 3, 7, 2, 0, 0, 2, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 6, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 4, 0, 1, 0, 3, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 1, 0, 0, 0, 5},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 1, 0, 0, 5, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 3},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 5, 4, 0, 2},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 2, 0}};
@@ -97,8 +97,8 @@ public class ViewResolver extends View {
                 {570, 620}};
 
         createPointsArray();
-        setSource(5);
-        setDestination(2);
+        setSource(0);
+        setDestination(1);
 
 
         dijkstraAlgorithm = new DijkstraAlgorithm(source.getId(), destination.getId());
@@ -106,13 +106,13 @@ public class ViewResolver extends View {
         path = dijkstraAlgorithm.getSolutionPath();
     }
 
-    public void createPointsArray(){
+    public void createPointsArray() {
         for (int i = 0; i < verticesPositions.length; i++) {
             name = "A" + String.valueOf(i);
             int tempFloor = 1;
             if (i > 5) tempFloor = 2;
-            if(i>10) tempFloor = 3;
-                points.add(new Point(getContext(), i,name, verticesPositions[i][0], verticesPositions[i][1], tempFloor, isMiddleSource));
+            if (i > 10) tempFloor = 3;
+            points.add(new Point(getContext(), i, name, verticesPositions[i][0], verticesPositions[i][1], tempFloor, isMiddleSource));
         }
     }
 
@@ -123,6 +123,17 @@ public class ViewResolver extends View {
 
         }
 
+    }
+
+    public void isSymmetric(int A[][]) {
+        for (int row = 0; row < A.length; row++) {
+            for (int col = 0; col < row; col++) {
+                if (A[row][col] != A[col][row]) {
+                    System.out.println("NIE SYMETRYCZNA");
+                }
+            }
+        }
+        System.out.println("SYMETRYCZNA");
     }
 
     public void drawConnections(Canvas canvas, int[] shortestPath) {
@@ -148,7 +159,7 @@ public class ViewResolver extends View {
             }
         }
 
-        if (closestPoint != null /*&& closestPoint.getFloor() == floor*/) { // sprawdź
+        if (closestPoint != null) { // sprawdź a to w nawiasie && closestPoint.getFloor() == floor
             clickedPoints.add(closestPoint);
             if (clickedPoints.size() > 2) {
                 clickedPoints.get(0).setSelected(false);
@@ -173,30 +184,28 @@ public class ViewResolver extends View {
 
     public void setSource(int sourceId) {
         if (source == null)
-        this.source = points.get(sourceId);
+            this.source = points.get(sourceId);
         invalidate();
     }
 
     public void setDestination(int destinationId) {
         if (destination == null)
-        this.destination = points.get(destinationId);
+            this.destination = points.get(destinationId);
         invalidate();
     }
 
-    public static ArrayList<Integer> getPointsId(){
+    public static ArrayList<Integer> getPointsId() {
         ArrayList pointsId = new ArrayList();
-        for (Point point : points){
+        for (Point point : points) {
             pointsId.add(point.getId());
         }
-        return  pointsId;
+        return pointsId;
     }
 
     @Override
     public void onDraw(Canvas canvas) {
         drawPoints(canvas);
-        //drawConnectionsBetweenPoints(canvas);
         drawConnections(canvas, path);
-        System.out.println("S: "+source.getId()+ "  D: " + destination.getId());
-        // showArrayToDrawConnections(createArrayToDrawConnections(path));
+        System.out.println("S: " + source.getId() + " D: " + destination.getId());
     }
 }
