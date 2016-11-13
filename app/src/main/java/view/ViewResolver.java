@@ -141,11 +141,22 @@ public class ViewResolver extends View {
     }
 
     public void drawConnections(Canvas canvas, int[] shortestPath) {
-        for (int i = 0; i < shortestPath.length; i++) {
-            for (Point point : points) {
+        for (Point point : points) {
+            for (int i = 0; i < shortestPath.length; i++) {
                 if (shortestPath[i] == point.getId()) {
                     if (i < shortestPath.length - 1 && point.getFloor() == floor)
                         canvas.drawLine(point.getX(), point.getY(), points.get(shortestPath[i + 1]).getX(), points.get(shortestPath[i + 1]).getY(), paint);
+                }
+            }
+        }
+    }
+
+    public void drawConnections2(Canvas canvas, int[] shortestPath) {
+        for (int j = 0; j< points.size() - 1; j ++) {
+            for (int i = 0; i < shortestPath.length; i++) {
+                if (shortestPath[i] == points.get(j).getId()) {
+                    if (i < shortestPath.length - 1 && points.get(j).getFloor() == floor && points.get(j+1).getFloor()==floor && (j+1) <= points.size())
+                        canvas.drawLine(points.get(j).getX(), points.get(j).getY(), points.get(shortestPath[i + 1]).getX(), points.get(shortestPath[i + 1]).getY(), paint);
                 }
             }
         }
@@ -225,7 +236,7 @@ public class ViewResolver extends View {
         drawPoints(canvas);
         setLinesProperties();
         onConstructor();
-        drawConnections(canvas, path);
+        drawConnections2(canvas, path);
         for (Point p : points)
             for(int pt : path)
                 if(pt == p.getId())
