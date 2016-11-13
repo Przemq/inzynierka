@@ -32,24 +32,26 @@ public class ViewActivity extends Activity {
         setContentView(R.layout.activity_view);
         button_up = (Button)findViewById(R.id.button_up);
         button_down = (Button)findViewById(R.id.button_down);
-        viewResolver = (ViewResolver) findViewById(R.id.drawView);
+
         tv_floor = (TextView)findViewById(R.id.tv_floor);
         tv_floor.setText(String.valueOf(floor));
-        final ListView source = (ListView) findViewById(R.id.source);
-        final ListView destination = (ListView) findViewById(R.id.destination);
+        ListView source = (ListView) findViewById(R.id.source);
+        ListView destination = (ListView) findViewById(R.id.destination);
+        //viewResolver = new ViewResolver(this);
+        viewResolver = (ViewResolver) findViewById(R.id.drawView);
 
-        final ArrayAdapter sourceAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, ViewResolver.getPointsId());
+
+        ArrayAdapter sourceAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, ViewResolver.getPointsId());
         source.setAdapter(sourceAdapter);
 
-        final ArrayAdapter destinationAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, ViewResolver.getPointsId());
+        ArrayAdapter destinationAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, ViewResolver.getPointsId());
         destination.setAdapter(destinationAdapter);
 
         source.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 viewResolver.setSource(position);
-                System.out.println("Position: " + position + "id: " + id);
-                sourceAdapter.notifyDataSetChanged();
+                //viewResolver.invalidate();
             }
         });
 
@@ -57,7 +59,7 @@ public class ViewActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                viewResolver.setDestination(position);
-                destinationAdapter.notifyDataSetChanged();
+                //viewResolver.invalidate();
             }
         });
 
@@ -88,11 +90,13 @@ public class ViewActivity extends Activity {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if(event.getAction() == MotionEvent.ACTION_DOWN){
-            System.out.println(event.getX()+" : "+event.getY());
+            //System.out.println(event.getX()+" : "+event.getY());
             if(event.getY() < viewResolver.getHeight())
             viewResolver.detectTouchedPoint(event.getX(),event.getY() - viewResolver.getY());
         }
+
         return super.onTouchEvent(event);
+
     }
 
 

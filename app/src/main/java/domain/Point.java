@@ -15,9 +15,11 @@ public class Point extends View {
     private boolean isMiddleSource;
     private String name;
     public static final float EDGE_WIDTH = 3f;
-    public static final boolean ANTII_ALIAS = true;
+    public static final boolean ANTI_ALIAS = true;
     public static final float TEXT_SIZE = 25f;
     public static final float RADIUS = 10f;
+    public static final float SPACE_BETWEEN_POINT_AND_TEXT = 3.5f;
+    public static final float LINE_WIDTH = 3f;
 
     private boolean isSelected;
     Paint pointStyle;
@@ -38,12 +40,12 @@ public class Point extends View {
     }
 
     public void initializePaintStyle(){
-        pointStyle = new Paint();
+
 
         pointStyleNormal = new Paint();
         pointStyleNormal.setColor(Color.BLUE);
         pointStyleNormal.setStrokeWidth(EDGE_WIDTH);
-        pointStyleNormal.setAntiAlias(ANTII_ALIAS);
+        pointStyleNormal.setAntiAlias(ANTI_ALIAS);
         pointStyleNormal.setStyle(Paint.Style.STROKE);
 
         textStyle = new Paint();
@@ -54,12 +56,13 @@ public class Point extends View {
         pointStyleSelected = new Paint();
         pointStyleSelected.setColor(Color.RED);
         pointStyleSelected.setStrokeWidth(EDGE_WIDTH);
-        pointStyleSelected.setAntiAlias(ANTII_ALIAS);
-        pointStyleSelected.setStyle(Paint.Style.STROKE);
+        pointStyleSelected.setAntiAlias(ANTI_ALIAS);
+        pointStyleSelected.setStyle(Paint.Style.FILL_AND_STROKE);
 
+        pointStyle = new Paint();
         pointStyle.setColor(Color.BLUE);
         pointStyle.setStrokeWidth(EDGE_WIDTH);
-        pointStyle.setAntiAlias(ANTII_ALIAS);
+        pointStyle.setAntiAlias(ANTI_ALIAS);
         pointStyle.setStyle(Paint.Style.STROKE);
 
     }
@@ -72,7 +75,6 @@ public class Point extends View {
        this.isSelected = selected;
         if(isSelected){
             pointStyle = pointStyleSelected;
-            System.out.println("Koloruję na czerwono");
         }else{
             pointStyle = pointStyleNormal;
         }
@@ -110,7 +112,7 @@ public class Point extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        canvas.drawText(name, getX() + SPACE_BETWEEN_POINT_AND_TEXT * RADIUS, getY() + RADIUS, textStyle);
         canvas.drawCircle(getX(), getY(), RADIUS, pointStyle);
-        canvas.drawText(name, getX() + 3 * RADIUS, getY() + RADIUS, textStyle);
     }
 }

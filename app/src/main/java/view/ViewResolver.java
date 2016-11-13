@@ -13,6 +13,8 @@ import java.util.LinkedList;
 import algorithm.DijkstraAlgorithm;
 import domain.Point;
 
+import static domain.Point.LINE_WIDTH;
+
 /**
  * Created by Przemek on 03.05.2016.
  */
@@ -27,6 +29,8 @@ public class ViewResolver extends View {
     private boolean isMiddleSource = false;
     private int[][] verticesPositions;
     private String name;
+    private int s=0;
+    private int d=1;
 
     private int floor = 1;
 
@@ -50,30 +54,27 @@ public class ViewResolver extends View {
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 2, 0}};
 
 
-    public ViewResolver(Context context) {
+   /* public ViewResolver(Context context){
+        super(context);
+    }*/
+
+  /* public ViewResolver(Context context) {
         super(context);
         onConstructor();
-    }
+    }*/
+
 
     public ViewResolver(Context context, AttributeSet attrs) {
         super(context, attrs);
         onConstructor();
     }
 
-    public ViewResolver(Context context, AttributeSet attrs, int defStyleAttr) {
+   /* public ViewResolver(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         onConstructor();
-    }
+    }*/
 
-    public void setFloor(int floor) {
-        this.floor = floor;
-    }
-
-    private void onConstructor() {
-        paint.setColor(Color.BLACK);
-        paint.setStrokeWidth(5f);
-        paint.setAntiAlias(true);
-
+    public void onConstructor(){
         points = new ArrayList<>();
         verticesPositions = new int[][]{
                 {50, 50},
@@ -100,11 +101,16 @@ public class ViewResolver extends View {
         setSource(0);
         setDestination(1);
 
-
         dijkstraAlgorithm = new DijkstraAlgorithm(source.getId(), destination.getId());
         dijkstraAlgorithm.dijkstra(graph);
         path = dijkstraAlgorithm.getSolutionPath();
+        //showFloors();
     }
+
+    public void setFloor(int floor) {
+        this.floor = floor;
+    }
+
 
     public void createPointsArray() {
         for (int i = 0; i < verticesPositions.length; i++) {
@@ -120,9 +126,7 @@ public class ViewResolver extends View {
         for (Point point : points) {
             if (point.getFloor() == floor)
                 point.draw(canvas);
-
         }
-
     }
 
     public void isSymmetric(int A[][]) {
@@ -140,7 +144,7 @@ public class ViewResolver extends View {
         for (int i = 0; i < shortestPath.length; i++) {
             for (Point point : points) {
                 if (shortestPath[i] == point.getId()) {
-                    if (i < shortestPath.length - 1 && point.getFloor() == floor) // sprawdź
+                    if (i < shortestPath.length - 1 && point.getFloor() == floor)
                         canvas.drawLine(point.getX(), point.getY(), points.get(shortestPath[i + 1]).getX(), points.get(shortestPath[i + 1]).getY(), paint);
                 }
             }
@@ -158,40 +162,35 @@ public class ViewResolver extends View {
                 distance = tempDistance;
             }
         }
+        addPointsToQueue(closestPoint);
+        invalidate();
+    }
 
-        if (closestPoint != null) { // sprawdź a to w nawiasie && closestPoint.getFloor() == floor
+    public void addPointsToQueue(Point closestPoint) {
+        if (closestPoint != null) {
             clickedPoints.add(closestPoint);
+
             if (clickedPoints.size() > 2) {
                 clickedPoints.get(0).setSelected(false);
                 clickedPoints.remove(0);
                 destination = clickedPoints.get(1);
             }
             source = clickedPoints.get(0);
-            System.out.println("Source: " + source.getId() + "   destination: " + destination.getId());
-            closestPoint.setSelected(true);
-            onConstructor();
+            source.setSelected(true);
+            destination.setSelected(true);
 
-        }
-        invalidate();
-    }
-
-    public void showArrayToDrawConnections(float[] array) {
-        System.out.println("Tablica do połączeń");
-        for (int i = 0; i < array.length; i++) {
-            System.out.println("pts  " + array[i]);
+            System.out.println("S: " + source.getId() + " D: " + destination.getId());
         }
     }
 
     public void setSource(int sourceId) {
         if (source == null)
             this.source = points.get(sourceId);
-        invalidate();
     }
 
     public void setDestination(int destinationId) {
         if (destination == null)
             this.destination = points.get(destinationId);
-        invalidate();
     }
 
     public static ArrayList<Integer> getPointsId() {
@@ -201,11 +200,37 @@ public class ViewResolver extends View {
         }
         return pointsId;
     }
+    public void colorSourceAndDestination(){
+        for(Point p : points){
+            if(p.getId() == source.getId() || p.getId() == destination.getId())
+                p.setSelected(true);
+            else p.setSelected(false);
+        }
+    }
+    public void setLinesProperties(){
+        paint.setColor(Color.BLACK);
+        paint.setStrokeWidth(LINE_WIDTH);
+        paint.setAntiAlias(true);
+    }
+
+    public void showFloors(){
+        for(Point p : points)
+            System.out.print(p.getId() + ":" + p.getFloor() + " ");
+        System.out.println(" ");
+    }
 
     @Override
     public void onDraw(Canvas canvas) {
+        colorSourceAndDestination();
         drawPoints(canvas);
+        setLinesProperties();
+        onConstructor();
         drawConnections(canvas, path);
-        System.out.println("S: " + source.getId() + " D: " + destination.getId());
+        for (Point p : points)
+            for(int pt : path)
+                if(pt == p.getId())
+                System.out.println(p.getX() + " : " + p.getY());
+
     }
+
 }
