@@ -1,5 +1,6 @@
 package view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -29,8 +30,8 @@ public class ViewResolver extends View {
     private boolean isMiddleSource = false;
     private int[][] verticesPositions;
     private String name;
-    private int s=0;
-    private int d=1;
+    private int s = 0;
+    private int d = 1;
 
     private int floor = 1;
 
@@ -54,10 +55,6 @@ public class ViewResolver extends View {
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 2, 0}};
 
 
-   /* public ViewResolver(Context context){
-        super(context);
-    }*/
-
   /* public ViewResolver(Context context) {
         super(context);
         onConstructor();
@@ -74,7 +71,7 @@ public class ViewResolver extends View {
         onConstructor();
     }*/
 
-    public void onConstructor(){
+    public void onConstructor() {
         points = new ArrayList<>();
         verticesPositions = new int[][]{
                 {50, 50},
@@ -98,13 +95,13 @@ public class ViewResolver extends View {
                 {570, 620}};
 
         createPointsArray();
-        setSource(0);
-        setDestination(1);
+        setSourceAndDestinationIfNull(0, 1);
+        //setSource(2);
+        //setDestination(4);
 
         dijkstraAlgorithm = new DijkstraAlgorithm(source.getId(), destination.getId());
         dijkstraAlgorithm.dijkstra(graph);
         path = dijkstraAlgorithm.getSolutionPath();
-        //showFloors();
     }
 
     public void setFloor(int floor) {
@@ -152,15 +149,15 @@ public class ViewResolver extends View {
     }
 
     public void drawConnections2(Canvas canvas, int[] shortestPath) {
-        for (int j = 0; j< points.size() - 1; j ++) {
-            for (int i = 0; i < shortestPath.length; i++) {
-                if (shortestPath[i] == points.get(j).getId()) {
-                    if (i < shortestPath.length - 1 && points.get(j).getFloor() == floor && points.get(j+1).getFloor()==floor && (j+1) <= points.size())
-                        canvas.drawLine(points.get(j).getX(), points.get(j).getY(), points.get(shortestPath[i + 1]).getX(), points.get(shortestPath[i + 1]).getY(), paint);
+        for (int i = 0; i < points.size(); i++) {
+            if (points.get(i).getFloor() == this.floor)
+                for (int j = 0; j < shortestPath.length; j++) {
+                    if (points.get(i).getId() == shortestPath[j] && j < shortestPath.length - 1)
+                        canvas.drawLine(points.get(i).getX(), points.get(i).getY(), points.get(shortestPath[j + 1]).getX(), points.get(shortestPath[j + 1]).getY(), paint);
                 }
-            }
         }
     }
+
 
     public void detectTouchedPoint(float x, float y) {
         Point closestPoint = null;
@@ -180,7 +177,6 @@ public class ViewResolver extends View {
     public void addPointsToQueue(Point closestPoint) {
         if (closestPoint != null) {
             clickedPoints.add(closestPoint);
-
             if (clickedPoints.size() > 2) {
                 clickedPoints.get(0).setSelected(false);
                 clickedPoints.remove(0);
@@ -194,40 +190,70 @@ public class ViewResolver extends View {
         }
     }
 
-    public void setSource(int sourceId) {
-        if (source == null)
-            this.source = points.get(sourceId);
+    public void setSource(final int sourceId) {
+        if (source != null) {
+            source.setSelected(false);
+        }
+
+        source = points.get(sourceId);
+        source.setSelected(true);
+
+        ((Activity) getContext()).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                invalidate();
+            }
+        });
     }
 
-    public void setDestination(int destinationId) {
-        if (destination == null)
-            this.destination = points.get(destinationId);
+    public void setDestination(final int destinationId) {
+        if (destination != null) {
+            destination.setSelected(false);
+        }
+
+        ((Activity) getContext()).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                destination = points.get(destinationId);
+                destination.setSelected(true);
+                invalidate();
+            }
+        });
     }
 
-    public static ArrayList<Integer> getPointsId() {
-        ArrayList pointsId = new ArrayList();
+    public ArrayList<Integer> getPointsId() {
+        ArrayList<Integer> pointsId = new ArrayList<>();
         for (Point point : points) {
             pointsId.add(point.getId());
         }
         return pointsId;
     }
-    public void colorSourceAndDestination(){
-        for(Point p : points){
-            if(p.getId() == source.getId() || p.getId() == destination.getId())
+
+    public void colorSourceAndDestination() {
+        for (Point p : points) {
+            if (p.getId() == source.getId() || p.getId() == destination.getId())
                 p.setSelected(true);
             else p.setSelected(false);
         }
     }
-    public void setLinesProperties(){
+
+    public void setLinesProperties() {
         paint.setColor(Color.BLACK);
         paint.setStrokeWidth(LINE_WIDTH);
         paint.setAntiAlias(true);
     }
 
-    public void showFloors(){
-        for(Point p : points)
+    public void showFloors() {
+        for (Point p : points)
             System.out.print(p.getId() + ":" + p.getFloor() + " ");
         System.out.println(" ");
+    }
+
+    public void setSourceAndDestinationIfNull(int source, int destination) {
+        if (this.source == null || this.destination == null) {
+            this.source = points.get(source);
+            this.destination = points.get(destination);
+        }
     }
 
     @Override
@@ -236,11 +262,12 @@ public class ViewResolver extends View {
         drawPoints(canvas);
         setLinesProperties();
         onConstructor();
-        drawConnections2(canvas, path);
+        drawConnections(canvas, path);
+        //testPointDrawtylkoTeCoPOdane(canvas,path2);
         for (Point p : points)
-            for(int pt : path)
-                if(pt == p.getId())
-                System.out.println(p.getX() + " : " + p.getY());
+            for (int pt : path)
+                if (pt == p.getId())
+                    System.out.println(p.getX() + " : " + p.getY());
 
     }
 

@@ -41,17 +41,19 @@ public class ViewActivity extends Activity {
         viewResolver = (ViewResolver) findViewById(R.id.drawView);
 
 
-        ArrayAdapter sourceAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, ViewResolver.getPointsId());
+        final ArrayAdapter<Integer> sourceAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, viewResolver.getPointsId());
         source.setAdapter(sourceAdapter);
 
-        ArrayAdapter destinationAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, ViewResolver.getPointsId());
+        final ArrayAdapter<Integer> destinationAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, viewResolver.getPointsId());
         destination.setAdapter(destinationAdapter);
+
 
         source.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                viewResolver.setSource(position);
-                //viewResolver.invalidate();
+                viewResolver.setSource(sourceAdapter.getItem(position));
+                sourceAdapter.notifyDataSetChanged();
+                System.out.println("Klik:   " + position);
             }
         });
 
@@ -59,7 +61,7 @@ public class ViewActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                viewResolver.setDestination(position);
-                //viewResolver.invalidate();
+                destinationAdapter.notifyDataSetChanged();
             }
         });
 
