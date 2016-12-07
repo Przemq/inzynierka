@@ -22,10 +22,14 @@ public class Point extends View {
     public static final float LINE_WIDTH = 3f;
 
     private boolean isSelected;
+    private boolean isSource;
+    private boolean isDestination;
     Paint pointStyle;
     Paint textStyle;
-    Paint pointStyleSelected;
+    Paint pointDestination;
     Paint pointStyleNormal;
+    Paint pointIsMiddleSource;
+    Paint pointSource;
 
     public Point(Context context, int id, String name, float xPosition, float yPosition, int floor, boolean isMiddleSource) {
         super(context);
@@ -53,17 +57,30 @@ public class Point extends View {
         textStyle.setTextSize(TEXT_SIZE);
         textStyle.setTextAlign(Paint.Align.CENTER);
 
-        pointStyleSelected = new Paint();
-        pointStyleSelected.setColor(Color.RED);
-        pointStyleSelected.setStrokeWidth(EDGE_WIDTH);
-        pointStyleSelected.setAntiAlias(ANTI_ALIAS);
-        pointStyleSelected.setStyle(Paint.Style.FILL_AND_STROKE);
+        pointDestination = new Paint();
+        pointDestination.setColor(Color.GREEN);
+        pointDestination.setStrokeWidth(EDGE_WIDTH);
+        pointDestination.setAntiAlias(ANTI_ALIAS);
+        pointDestination.setStyle(Paint.Style.FILL_AND_STROKE);
 
         pointStyle = new Paint();
         pointStyle.setColor(Color.BLUE);
         pointStyle.setStrokeWidth(EDGE_WIDTH);
         pointStyle.setAntiAlias(ANTI_ALIAS);
         pointStyle.setStyle(Paint.Style.STROKE);
+
+        pointIsMiddleSource = new Paint();
+        pointIsMiddleSource.setColor(Color.GREEN);
+        pointIsMiddleSource.setStrokeWidth(EDGE_WIDTH);
+        pointIsMiddleSource.setAntiAlias(ANTI_ALIAS);
+        pointIsMiddleSource.setStyle(Paint.Style.STROKE);
+
+        pointSource = new Paint();
+        pointSource.setColor(Color.RED);
+        pointSource.setStrokeWidth(EDGE_WIDTH);
+        pointSource.setAntiAlias(ANTI_ALIAS);
+        pointSource.setStyle(Paint.Style.FILL_AND_STROKE);
+
 
     }
 
@@ -73,15 +90,20 @@ public class Point extends View {
 
     public void setSelected(boolean selected) {
        this.isSelected = selected;
-        if(isSelected){
-            pointStyle = pointStyleSelected;
+      /*  if(isSelected){
+            pointStyle = pointDestination;
         }else{
             pointStyle = pointStyleNormal;
-        }
+        }*/
     }
 
     public void setMiddleSource(boolean middleSource) {
         isMiddleSource = middleSource;
+        if(isMiddleSource){
+            pointStyle = pointIsMiddleSource;
+        }else{
+            pointStyle = pointStyleNormal;
+        }
     }
 
     public boolean isMiddleSource() {
@@ -107,6 +129,33 @@ public class Point extends View {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isDestination() {
+        return isDestination;
+
+    }
+
+    public void setDestination(boolean destination) {
+        isDestination = destination;
+        if(isDestination){
+            pointStyle = pointDestination;
+        }else{
+            pointStyle = pointStyleNormal;
+        }
+    }
+
+    public boolean isSource() {
+        return isSource;
+    }
+
+    public void setSource(boolean source) {
+        isSource = source;
+        if(isSource){
+            pointStyle = pointSource;
+        }else{
+            pointStyle = pointStyleNormal;
+        }
     }
 
     @Override

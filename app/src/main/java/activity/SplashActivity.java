@@ -24,7 +24,7 @@ public class SplashActivity extends Activity {
         toMainActivity = new Intent(this,MainActivity.class);
         startActivity(toMainActivity);
 
-       /* if(isNetworkAvailable()){
+      /*  if(isNetworkAvailable()){
             new ServerRequest(ServiceType.GET_DATABASE, new Parameters()).setServerRequestListener(new ServerRequest.ServerRequestListener() {
                 @Override
                 public void onSuccess(String json) {
