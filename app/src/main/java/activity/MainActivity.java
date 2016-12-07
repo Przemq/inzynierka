@@ -17,7 +17,7 @@ import com.inz.przemek.dijkstra.R;
 public class MainActivity extends Activity {
 
 
-    Intent toTestActivity;
+    Intent toViewActivity;
 
     FloatingActionButton bt1;
     FloatingActionButton bt2;
@@ -32,14 +32,16 @@ public class MainActivity extends Activity {
         bt2 = (FloatingActionButton)findViewById(R.id.fab2);
         bt3 = (FloatingActionButton)findViewById(R.id.fab3);
         bt4 = (FloatingActionButton)findViewById(R.id.fab4);
-
-        toTestActivity = new Intent(MainActivity.this, ViewActivity.class);
+        Intent i = getIntent();
+        String dane = i.getStringExtra("data");
+        toViewActivity = new Intent(MainActivity.this, ViewActivity.class);
+        toViewActivity.putExtra("data",dane);
 
         bt4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 System.out.println("1");
-                startActivity(toTestActivity);
+                startActivity(toViewActivity);
             }
         });
 

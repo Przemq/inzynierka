@@ -7,14 +7,9 @@ import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.Environment;
 import android.util.AttributeSet;
 import android.view.View;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -41,6 +36,7 @@ public class ViewResolver extends View {
     private String name;
     private int floor = 1;
     private boolean shouldShowWarning = true;
+    private String dataJSON;
 
     int[][] graph = new int[][]{
             {0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -91,19 +87,17 @@ public class ViewResolver extends View {
     }
 
 
-    public ViewResolver(Context context, AttributeSet attrs) {
+   public ViewResolver(Context context, AttributeSet attrs) {
         super(context, attrs);
         onConstructor();
     }
 
-    public ViewResolver(Context context, AttributeSet attrs, int defStyleAttr) {
+  /*  public ViewResolver(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         onConstructor();
-    }
+    }*/
 
     public void onConstructor() {
-
-readJSONFromFIle("testowyJSON");
         points = new ArrayList<>();
 
         verticesPositions2 = new int[][]{
@@ -215,7 +209,6 @@ readJSONFromFIle("testowyJSON");
         return pointsToConnectOnFloor;
     }
 
-
     public void drawConnections(Canvas canvas, ArrayList<Point> list) {
         for (int i = 0; i < list.size(); i++) {
             if (i < list.size() - 1) {
@@ -224,7 +217,6 @@ readJSONFromFIle("testowyJSON");
         }
     }
 
-    // wykrywa kliknięcie i oblicza najkrótszą odległość od punktów i wyznacza który jest kliknięty
     public void detectTouchedPoint(float x, float y) {
         Point closestPoint = null;
         float distance = getWidth() * getHeight();
@@ -240,7 +232,6 @@ readJSONFromFIle("testowyJSON");
         invalidate();
     }
 
-    // dodaje punkty do koleji source-destination
     public void addPointsToQueue(Point closestPoint) {
         if (closestPoint != null) {
             clickedPoints.add(closestPoint);
@@ -289,7 +280,6 @@ readJSONFromFIle("testowyJSON");
         });
     }
 
-    // pobiera listę Id punktów potrzebną do listView
     public List<Integer> getPointsId() {
         List<Integer> pointsId = new ArrayList<>();
         for (Point point : points) {
@@ -317,7 +307,6 @@ readJSONFromFIle("testowyJSON");
         }
     }
 
-    // kolorowanie pośrednich punktów
     public void colorMiddle() {
         for (Point p : selectPointsToDrawConnections(solutionPath)){
             if(p.isMiddleSource())
@@ -338,7 +327,6 @@ readJSONFromFIle("testowyJSON");
         System.out.println(" ");
     }
 
-    // inicializuje s i d
     public void setSourceAndDestinationIfNull(int source, int destination) {
         if (this.source == null || this.destination == null) {
             this.source = points.get(source);
@@ -373,27 +361,14 @@ readJSONFromFIle("testowyJSON");
     }
 
     public void parseJSON(){
-
     }
 
-   public String readJSONFromFIle(String fileName) {
-       File root = Environment.getExternalStorageDirectory();
-       File file = new File(root,fileName + ".txt");
-       StringBuilder text = new StringBuilder();
+    public String getDataJSON() {
+        return dataJSON;
+    }
 
-       try {
-           BufferedReader br = new BufferedReader(new FileReader(file));
-           String line;
-           while ((line = br.readLine()) != null) {
-               text.append(line);
-           }
-           br.close();
-       }
-       catch (IOException e) {
-          e.printStackTrace();
-       }
-       System.out.println(text.toString());
-       return  text.toString();
+    public void setDataJSON(String dataJSON) {
+        this.dataJSON = dataJSON;
     }
 
     @Override

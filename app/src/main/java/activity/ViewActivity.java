@@ -3,6 +3,7 @@ package activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -33,12 +34,16 @@ public class ViewActivity extends Activity {
         Button button_down = (Button) findViewById(R.id.button_down);
         Button button_source = (Button) findViewById(R.id.source_button);
         Button button_destination = (Button) findViewById(R.id.destination_button);
+        Intent i = getIntent();
 
         tv_floor = (TextView)findViewById(R.id.tv_floor);
         tv_floor.setText(String.valueOf(floor));
         viewResolver = (ViewResolver) findViewById(R.id.drawView);
         layout = (LinearLayout)findViewById(R.id.viewLayout);
         layout.setBackgroundResource(R.drawable.pietro1);
+        viewResolver.setDataJSON(i.getStringExtra("data"));
+
+        // trzeba dodać getExtras dla grafiki i domyślnie wczytać pierwszą
 
         final ArrayAdapter<Integer> pointsAdapter = new ArrayAdapter<Integer>(ViewActivity.this, android.R.layout.select_dialog_singlechoice,viewResolver.getPointsId());
 
