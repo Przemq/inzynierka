@@ -10,6 +10,9 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -361,6 +364,12 @@ public class ViewResolver extends View {
     }
 
     public void parseJSON(){
+        try {
+            JSONObject receivedData = new JSONObject(dataJSON);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getDataJSON() {
