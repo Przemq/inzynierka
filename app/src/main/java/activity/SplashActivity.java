@@ -10,10 +10,16 @@ import android.os.Environment;
 
 import com.inz.przemek.dijkstra.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+
+import domain.Point;
 
 /**
  * Created by Przemek on 11.10.2016.
@@ -29,6 +35,7 @@ public class SplashActivity extends Activity {
         setContentView(R.layout.activity_splash);
         toMainActivity = new Intent(this,MainActivity.class);
         toMainActivity.putExtra("data",readJSONFromFIle("testowyJSON"));
+        //parseJSON(readJSONFromFIle("testowyJSON"));
         startActivity(toMainActivity);
 
       /*  if(isNetworkAvailable()){
@@ -72,5 +79,29 @@ public class SplashActivity extends Activity {
             e.printStackTrace();
         }
         return  text.toString();
+    }
+
+    public void parseJSON(String json){
+        System.out.println("jestem w funkcji");
+
+        try {
+            System.out.println("jestem w TRY");
+            System.out.println(json);
+            JSONObject receivedData = new JSONObject(json);
+            JSONArray pointsArray =  receivedData.getJSONArray("pointsArray");
+            for(int i = 0; i < pointsArray.length(); i ++){
+                JSONObject p = pointsArray.getJSONObject(i);
+                int id = p.getInt("id");
+                String name = p.getString("name");
+                float xPosition = (float)p.getDouble("xPosition");
+                float yPosition = (float)p.getDouble("yPosition");
+                int floor = p.getInt("floor");
+                boolean isMiddleSource = p.getBoolean("isMiddleSource");
+                System.out.println("id: " + id + "  name: " + name + "  x: " + xPosition + "  y: " + yPosition + "  floor: " + floor + "  isMiddleSource: " + isMiddleSource);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

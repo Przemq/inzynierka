@@ -10,6 +10,7 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -35,30 +36,10 @@ public class ViewResolver extends View {
     private Point destination;
     private boolean isMiddleSource = false;
     private int[][] verticesPositions;
-    private int[][] verticesPositions2;
     private String name;
     private int floor = 1;
     private boolean shouldShowWarning = true;
     private String dataJSON;
-
-    int[][] graph = new int[][]{
-            {0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {3, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {3, 2, 0, 5, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 2, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 4, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 2, 7, 0, 4, 0, 3, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 8, 4, 0, 8, 7, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 2, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 3, 7, 2, 0, 0, 2, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 6, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 4, 0, 1, 0, 3, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 1, 0, 0, 5, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 3},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 5, 4, 0, 2},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 2, 0}};
 
 
     int[][] graph2 = new int[][]{
@@ -95,34 +76,13 @@ public class ViewResolver extends View {
         onConstructor();
     }
 
-  /*  public ViewResolver(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ViewResolver(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         onConstructor();
-    }*/
+    }
 
     public void onConstructor() {
         points = new ArrayList<>();
-
-        verticesPositions2 = new int[][]{
-                {50, 50},
-                {50, 600},
-                {250, 300},
-                {300, 700},
-                {500, 50},
-                {500, 550},
-
-                {50, 50},
-                {50, 600},
-                {250, 400},
-                {500, 50},
-                {500, 600},
-
-                {70, 70},
-                {70, 620},
-                {270, 370},
-                {350, 620},
-                {550, 370},
-                {570, 620}};
 
         verticesPositions = new int[][]{
                 {32, 45},
@@ -149,8 +109,9 @@ public class ViewResolver extends View {
                 {662, 894},
         };
 
+        //createPointsArray();
+        parseJSON("{\"pointsArray\":[{\"xPosition\":158,\"yPosition\":201,\"name\":\"A0\",\"id\":0,\"floor\":1,\"isMiddleSource\":false},{\"xPosition\":159,\"yPosition\":359,\"name\":\"A1\",\"id\":1,\"floor\":1,\"isMiddleSource\":false},{\"xPosition\":383,\"yPosition\":178,\"name\":\"A3\",\"id\":3,\"floor\":1,\"isMiddleSource\":false},{\"xPosition\":290,\"yPosition\":282,\"name\":\"A4\",\"id\":4,\"floor\":1,\"isMiddleSource\":false},{\"xPosition\":384,\"yPosition\":353,\"name\":\"A2\",\"id\":2,\"floor\":1,\"isMiddleSource\":true}],\"connectionsArray\":[{\"distance\":154,\"from\":0,\"to\":4},{\"distance\":151,\"from\":1,\"to\":4},{\"distance\":117,\"from\":4,\"to\":2},{\"distance\":158,\"from\":0,\"to\":1}]}");
 
-        createPointsArray();
         setSourceAndDestinationIfNull(0, 1);
 
         dijkstraAlgorithm = new DijkstraAlgorithm(source.getId(), destination.getId());
@@ -179,6 +140,8 @@ public class ViewResolver extends View {
             else isMiddleSource = false;
             points.add(new Point(getContext(), i, name, verticesPositions[i][0], verticesPositions[i][1], tempFloor, isMiddleSource));
         }
+       System.out.println(dataJSON);
+        //parseJSON(dataJSON);
     }
 
     public void drawPoints(Canvas canvas) {
@@ -363,13 +326,45 @@ public class ViewResolver extends View {
         this.shouldShowWarning = shouldShowWarning;
     }
 
-    public void parseJSON(){
+    public void parseJSON(String json){
         try {
-            JSONObject receivedData = new JSONObject(dataJSON);
+            System.out.println(json);
+            JSONObject receivedData = new JSONObject(json);
+            JSONArray pointsArray =  receivedData.getJSONArray("pointsArray");
+            JSONArray connectionsArr =  receivedData.getJSONArray("connectionsArray");
+            int [][] dijkstraGraph = new int[pointsArray.length()][pointsArray.length()];
+            zerosTab(dijkstraGraph);
+            for(int i = 0; i < pointsArray.length(); i ++){
+                JSONObject p = pointsArray.getJSONObject(i);
+                int id = p.getInt("id");
+                String name = p.getString("name");
+                float xPosition = (float)p.getDouble("xPosition");
+                float yPosition = (float)p.getDouble("yPosition");
+                int floor = p.getInt("floor");
+                boolean isMiddleSource = p.getBoolean("isMiddleSource");
+                Point pt= new Point(this.getContext(),id,name,xPosition,yPosition,floor,isMiddleSource);
+                points.add(pt);
+                System.out.println("id: " +pt.getId() + "  name: " + pt.getName() + "  x: " + pt.getX() + "  y: " + pt.getY() + "  floor: " + pt.getFloor() + "  isMiddleSource: " + pt.isMiddleSource());
+            }
 
+            for (int i = 0; i < connectionsArr.length(); i++ ){
+                    JSONObject c = connectionsArr.getJSONObject(i);
+                int from = c.getInt("from");
+                int to = c.getInt("to");
+                int distance = c.getInt("distance");
+                dijkstraGraph[from][to] = distance;
+                dijkstraGraph[to][from] = distance;
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+    private void zerosTab(int [][] tab){
+            for (int i = 0; i< tab.length; i++){
+                for (int j = 0; j < tab.length; j ++){
+                    tab[i][j] = 0;
+                }
+            }
     }
 
     public String getDataJSON() {
