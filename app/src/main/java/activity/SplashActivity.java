@@ -81,7 +81,7 @@ public class SplashActivity extends Activity {
         return  text.toString();
     }
 
-    public void parseJSON(String json){
+   /* public void parseJSON(String json){
         System.out.println("jestem w funkcji");
 
         try {
@@ -103,5 +103,5 @@ public class SplashActivity extends Activity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 }

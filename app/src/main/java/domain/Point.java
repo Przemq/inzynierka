@@ -17,7 +17,7 @@ public class Point extends View {
     public static final float EDGE_WIDTH = 3f;
     public static final boolean ANTI_ALIAS = true;
     public static final float TEXT_SIZE = 25f;
-    public static final float RADIUS = 10f;
+    public static final float RADIUS = 9f;
     public static final float SPACE_BETWEEN_POINT_AND_TEXT = 3.5f;
     public static final float LINE_WIDTH = 3f;
 

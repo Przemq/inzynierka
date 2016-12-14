@@ -40,30 +40,8 @@ public class ViewResolver extends View {
     private int floor = 1;
     private boolean shouldShowWarning = true;
     private String dataJSON;
+    public static final int X_CORRECTION = 3;
 
-
-    int[][] graph2 = new int[][]{
-            {0, 6, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {6, 0, 2, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 4, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {4, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 3, 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 3, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 4, 0, 0, 3, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 3, 0, 0, 3, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 6, 0, 6, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 8, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 5, 0, 6, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 1, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 3, 3, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 3, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 10},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0},};
 
     public ViewResolver(Context context) {
         super(context);
@@ -71,7 +49,7 @@ public class ViewResolver extends View {
     }
 
 
-   public ViewResolver(Context context, AttributeSet attrs) {
+    public ViewResolver(Context context, AttributeSet attrs) {
         super(context, attrs);
         onConstructor();
     }
@@ -83,49 +61,9 @@ public class ViewResolver extends View {
 
     public void onConstructor() {
         points = new ArrayList<>();
-
-        verticesPositions = new int[][]{
-                {32, 45},
-                {32, 465},
-                {130, 465},
-                {32, 900},
-                {365, 45},
-                {365, 250},
-                {365, 600},
-                {365, 900},
-                {560, 130},
-                {560, 250},
-                {662, 900},
-
-                {27, 40},
-                {27, 140},
-                {27, 386},
-                {602, 140},
-                {602, 255},
-                {562, 386},
-                {360, 386},
-                {562, 605},
-                {27, 894},
-                {662, 894},
-        };
-
-        //createPointsArray();
-        parseJSON("{\"pointsArray\":[{\"xPosition\":158,\"yPosition\":201,\"name\":\"A0\",\"id\":0,\"floor\":1,\"isMiddleSource\":false},{\"xPosition\":159,\"yPosition\":359,\"name\":\"A1\",\"id\":1,\"floor\":1,\"isMiddleSource\":false},{\"xPosition\":383,\"yPosition\":178,\"name\":\"A3\",\"id\":3,\"floor\":1,\"isMiddleSource\":false},{\"xPosition\":290,\"yPosition\":282,\"name\":\"A4\",\"id\":4,\"floor\":1,\"isMiddleSource\":false},{\"xPosition\":384,\"yPosition\":353,\"name\":\"A2\",\"id\":2,\"floor\":1,\"isMiddleSource\":true}],\"connectionsArray\":[{\"distance\":154,\"from\":0,\"to\":4},{\"distance\":151,\"from\":1,\"to\":4},{\"distance\":117,\"from\":4,\"to\":2},{\"distance\":158,\"from\":0,\"to\":1}]}");
-
-        setSourceAndDestinationIfNull(0, 1);
-
-        dijkstraAlgorithm = new DijkstraAlgorithm(source.getId(), destination.getId());
-        dijkstraAlgorithm.dijkstra(graph2);
-        solutionPath = dijkstraAlgorithm.getSolutionPath();
-
-        if (source.getId() == destination.getId() && source.getFloor() == floor && shouldShowWarning) {
-            showWarning("Source and destination should be different points");
-            setShouldShowWarning(false);
-        }
+parseJSON("{\"metaData\":{\"idName\":9},\"pointsArray\":[{\"xPosition\":50.943397521972656,\"yPosition\":77.75916290283203,\"name\":\"A0\",\"id\":0,\"floor\":1,\"isMiddleSource\":false},{\"xPosition\":57.7358512878418,\"yPosition\":112.50261688232422,\"name\":\"A1\",\"id\":1,\"floor\":1,\"isMiddleSource\":false},{\"xPosition\":55.47169876098633,\"yPosition\":167.09947204589844,\"name\":\"A2\",\"id\":2,\"floor\":1,\"isMiddleSource\":false},{\"xPosition\":48.67924499511719,\"yPosition\":193.5706787109375,\"name\":\"A3\",\"id\":3,\"floor\":1,\"isMiddleSource\":false},{\"xPosition\":54.339622497558594,\"yPosition\":229.9685821533203,\"name\":\"A4\",\"id\":4,\"floor\":1,\"isMiddleSource\":false},{\"xPosition\":305.6603698730469,\"yPosition\":79.41361236572266,\"name\":\"A5\",\"id\":5,\"floor\":1,\"isMiddleSource\":false},{\"xPosition\":193.58489990234375,\"yPosition\":865.2774658203125,\"name\":\"A6\",\"id\":6,\"floor\":1,\"isMiddleSource\":false},{\"xPosition\":19.245283126831055,\"yPosition\":911.6021118164062,\"name\":\"A7\",\"id\":7,\"floor\":1,\"isMiddleSource\":false},{\"xPosition\":365.6603698730469,\"yPosition\":913.2565307617188,\"name\":\"A8\",\"id\":8,\"floor\":1,\"isMiddleSource\":false}],\"connectionsArray\":[]}");
 
     }
-
-
     public void setFloor(int floor) {
         this.floor = floor;
     }
@@ -140,7 +78,7 @@ public class ViewResolver extends View {
             else isMiddleSource = false;
             points.add(new Point(getContext(), i, name, verticesPositions[i][0], verticesPositions[i][1], tempFloor, isMiddleSource));
         }
-       System.out.println(dataJSON);
+        // System.out.println(dataJSON);
         //parseJSON(dataJSON);
     }
 
@@ -205,7 +143,7 @@ public class ViewResolver extends View {
                 clickedPoints.get(0).setSelected(false);
                 clickedPoints.remove(0);
                 destination = clickedPoints.get(1);
-                System.out.println("I am i the loop");
+                //System.out.println("I am i the loop");
             }
             source = clickedPoints.get(0);
             source.setSelected(true);
@@ -274,8 +212,8 @@ public class ViewResolver extends View {
     }
 
     public void colorMiddle() {
-        for (Point p : selectPointsToDrawConnections(solutionPath)){
-            if(p.isMiddleSource())
+        for (Point p : selectPointsToDrawConnections(solutionPath)) {
+            if (p.isMiddleSource())
                 p.setMiddleSource(true);
         }
 
@@ -326,45 +264,51 @@ public class ViewResolver extends View {
         this.shouldShowWarning = shouldShowWarning;
     }
 
-    public void parseJSON(String json){
+    public void parseJSON(String json) {
         try {
             System.out.println(json);
             JSONObject receivedData = new JSONObject(json);
-            JSONArray pointsArray =  receivedData.getJSONArray("pointsArray");
-            JSONArray connectionsArr =  receivedData.getJSONArray("connectionsArray");
-            int [][] dijkstraGraph = new int[pointsArray.length()][pointsArray.length()];
+            JSONArray pointsArray = receivedData.getJSONArray("pointsArray");
+            JSONArray connectionsArr = receivedData.getJSONArray("connectionsArray");
+            int[][] dijkstraGraph = new int[pointsArray.length()][pointsArray.length()];
             zerosTab(dijkstraGraph);
-            for(int i = 0; i < pointsArray.length(); i ++){
+            for (int i = 0; i < pointsArray.length(); i++) {
                 JSONObject p = pointsArray.getJSONObject(i);
                 int id = p.getInt("id");
                 String name = p.getString("name");
-                float xPosition = (float)p.getDouble("xPosition");
-                float yPosition = (float)p.getDouble("yPosition");
+                float xPosition = (float) p.getDouble("xPosition");
+                float yPosition = (float) p.getDouble("yPosition");
                 int floor = p.getInt("floor");
                 boolean isMiddleSource = p.getBoolean("isMiddleSource");
-                Point pt= new Point(this.getContext(),id,name,xPosition,yPosition,floor,isMiddleSource);
+                Point pt = new Point(this.getContext(), id, name, xPosition + X_CORRECTION, yPosition, floor, isMiddleSource);
                 points.add(pt);
-                System.out.println("id: " +pt.getId() + "  name: " + pt.getName() + "  x: " + pt.getX() + "  y: " + pt.getY() + "  floor: " + pt.getFloor() + "  isMiddleSource: " + pt.isMiddleSource());
             }
 
-            for (int i = 0; i < connectionsArr.length(); i++ ){
-                    JSONObject c = connectionsArr.getJSONObject(i);
-                int from = c.getInt("from");
-                int to = c.getInt("to");
+            for (int i = 0; i < connectionsArr.length(); i++) {
+                JSONObject c = connectionsArr.getJSONObject(i);
+                int from = c.getInt("source");
+                int to = c.getInt("destination");
                 int distance = c.getInt("distance");
                 dijkstraGraph[from][to] = distance;
                 dijkstraGraph[to][from] = distance;
             }
+
+            setSourceAndDestinationIfNull(0, 1);
+            dijkstraAlgorithm = new DijkstraAlgorithm(source.getId(), destination.getId(),pointsArray.length());
+            dijkstraAlgorithm.dijkstra(dijkstraGraph);
+            solutionPath = dijkstraAlgorithm.getSolutionPath();
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
-    private void zerosTab(int [][] tab){
-            for (int i = 0; i< tab.length; i++){
-                for (int j = 0; j < tab.length; j ++){
-                    tab[i][j] = 0;
-                }
+
+    private void zerosTab(int[][] tab) {
+        for (int i = 0; i < tab.length; i++) {
+            for (int j = 0; j < tab.length; j++) {
+                tab[i][j] = 0;
             }
+        }
     }
 
     public String getDataJSON() {
@@ -383,6 +327,7 @@ public class ViewResolver extends View {
         setLinesProperties();
         onConstructor();
         drawConnections(canvas, selectPointsToDrawConnections(solutionPath));
-
+        for (Point p : points)
+            System.out.println(p.getId() + ":" + p.getName() + ":" + p.getX() + ":" + p.getY() + ":" + p.getFloor() + ":" + p.isMiddleSource());
     }
 }
