@@ -2,17 +2,17 @@ package enums;
 
 
 public enum ServiceType {
-    GET_DATABASE,
+    GET,
     CHECK_VERSION,
     ADD_FICHE;
 
-    public static final String SERVER_PATH = "http://www.datastore.waw.pl/Fiche2016/";
+    public static final String SERVER_PATH = "http://www.przem94.ayz.pl/dijkstra/";
 
     public static String getURL(ServiceType serviceType){
         switch(serviceType){
 
-            case GET_DATABASE:
-                return SERVER_PATH + "getDatabase.php";
+            case GET:
+                return SERVER_PATH + "testData.txt";
             case CHECK_VERSION:
                 return SERVER_PATH + "checkVersion.php";
             case ADD_FICHE:

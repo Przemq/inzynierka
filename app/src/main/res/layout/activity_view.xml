@@ -88,6 +88,15 @@
             android:layout_marginRight="42dp"
             android:layout_marginEnd="42dp" />
 
+        <Button
+            android:text="Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/button_up"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/button_show_all" />
+
     </RelativeLayout>
 
 </LinearLayout>

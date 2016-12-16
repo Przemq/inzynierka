@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Environment;
+import android.widget.Toast;
 
 import com.inz.przemek.dijkstra.R;
 
@@ -20,6 +21,9 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import domain.Point;
+import enums.ServiceType;
+import server.Parameters;
+import server.ServerRequest;
 
 /**
  * Created by Przemek on 11.10.2016.
@@ -36,10 +40,10 @@ public class SplashActivity extends Activity {
         toMainActivity = new Intent(this,MainActivity.class);
         toMainActivity.putExtra("data",readJSONFromFIle("testowyJSON"));
         //parseJSON(readJSONFromFIle("testowyJSON"));
-        startActivity(toMainActivity);
+       // startActivity(toMainActivity);
 
-      /*  if(isNetworkAvailable()){
-            new ServerRequest(ServiceType.GET_DATABASE, new Parameters()).setServerRequestListener(new ServerRequest.ServerRequestListener() {
+        if(isNetworkAvailable()){
+            new ServerRequest(ServiceType.GET, new Parameters()).setServerRequestListener(new ServerRequest.ServerRequestListener() {
                 @Override
                 public void onSuccess(String json) {
                     System.out.println(json);
@@ -52,7 +56,10 @@ public class SplashActivity extends Activity {
                 }
 
             }).execute();
-        }*/
+        }
+        else {
+            Toast.makeText(this, "No network, check your connection", Toast.LENGTH_LONG).show();
+        }
     }
 
     private boolean isNetworkAvailable() {
@@ -80,28 +87,4 @@ public class SplashActivity extends Activity {
         }
         return  text.toString();
     }
-
-   /* public void parseJSON(String json){
-        System.out.println("jestem w funkcji");
-
-        try {
-            System.out.println("jestem w TRY");
-            System.out.println(json);
-            JSONObject receivedData = new JSONObject(json);
-            JSONArray pointsArray =  receivedData.getJSONArray("pointsArray");
-            for(int i = 0; i < pointsArray.length(); i ++){
-                JSONObject p = pointsArray.getJSONObject(i);
-                int id = p.getInt("id");
-                String name = p.getString("name");
-                float xPosition = (float)p.getDouble("xPosition");
-                float yPosition = (float)p.getDouble("yPosition");
-                int floor = p.getInt("floor");
-                boolean isMiddleSource = p.getBoolean("isMiddleSource");
-                System.out.println("id: " + id + "  name: " + name + "  x: " + xPosition + "  y: " + yPosition + "  floor: " + floor + "  isMiddleSource: " + isMiddleSource);
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }*/
 }

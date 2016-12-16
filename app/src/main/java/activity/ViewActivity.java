@@ -14,6 +14,9 @@ import android.widget.TextView;
 
 import com.inz.przemek.dijkstra.R;
 
+import java.util.Objects;
+
+import domain.Point;
 import view.ViewResolver;
 
 /**
@@ -34,6 +37,7 @@ public class ViewActivity extends Activity {
         Button button_down = (Button) findViewById(R.id.button_down);
         Button button_source = (Button) findViewById(R.id.source_button);
         Button button_destination = (Button) findViewById(R.id.destination_button);
+        Button button_show_all = (Button) findViewById(R.id.button_show_all);
         Intent i = getIntent();
 
         tv_floor = (TextView)findViewById(R.id.tv_floor);
@@ -45,15 +49,14 @@ public class ViewActivity extends Activity {
 
         // trzeba dodać getExtras dla grafiki i domyślnie wczytać pierwszą
 
-        final ArrayAdapter<Integer> pointsAdapter = new ArrayAdapter<Integer>(ViewActivity.this, android.R.layout.select_dialog_singlechoice,viewResolver.getPointsId());
+        final ArrayAdapter<String> pointsAdapter = new ArrayAdapter<String>(ViewActivity.this, android.R.layout.select_dialog_singlechoice,viewResolver.getPointsId());
 
         button_up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 floor++;
-                if(floor > 3) floor = 3;
-               viewResolver.setFloor(floor);
-                tv_floor.setText(String.valueOf(floor));
+                viewResolver.setFloor(viewResolver.getFloor() + 1);
+                tv_floor.setText(String.valueOf(viewResolver.getFloor()));
                 setBackground();
                 viewResolver.invalidate();
             }
@@ -62,10 +65,8 @@ public class ViewActivity extends Activity {
         button_down.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                floor--;
-                if(floor < 1) floor = 1;
-                viewResolver.setFloor(floor);
-                tv_floor.setText(String.valueOf(floor));
+                viewResolver.setFloor(viewResolver.getFloor() - 1);
+                tv_floor.setText(String.valueOf(viewResolver.getFloor()));
                 setBackground();
                 viewResolver.invalidate();
             }
@@ -88,9 +89,17 @@ public class ViewActivity extends Activity {
             }
         });
 
+        button_show_all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewResolver.setShowAllConnections(!viewResolver.isShowAllConnections());
+                viewResolver.invalidate();
+            }
+        });
+
     }
 
-    public void showSourceList(final ArrayAdapter<Integer> adapter, String header){
+    public void showSourceList(final ArrayAdapter<String> adapter, String header){
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(ViewActivity.this);
         builderSingle.setIcon(R.drawable.ic_action_name);
         builderSingle.setTitle(header);
@@ -107,7 +116,11 @@ public class ViewActivity extends Activity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 viewResolver.invalidate();
-             Integer pos = adapter.getItem(which);
+                String pos = adapter.getItem(which);
+                System.out.println(pos);
+                viewResolver.invalidate();
+
+
                 viewResolver.setSource(pos);
 
             }
@@ -115,7 +128,7 @@ public class ViewActivity extends Activity {
         builderSingle.show();
     }
 
-    public void showDestinationList(final ArrayAdapter<Integer> adapter, String header){
+    public void showDestinationList(final ArrayAdapter<String> adapter, String header){
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(ViewActivity.this);
         builderSingle.setIcon(R.drawable.ic_action_name);
         builderSingle.setTitle(header);
@@ -132,8 +145,10 @@ public class ViewActivity extends Activity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 viewResolver.invalidate();
-                Integer pos = adapter.getItem(which);
+                String pos = adapter.getItem(which);
                 viewResolver.setDestination(pos);
+                System.out.println(pos);
+                viewResolver.invalidate();
 
             }
         });
@@ -145,7 +160,7 @@ public class ViewActivity extends Activity {
         if(event.getAction() == MotionEvent.ACTION_DOWN){
             //System.out.println(event.getX()+" : "+event.getY());
             if(event.getY() < viewResolver.getHeight())
-            viewResolver.detectTouchedPoint(event.getX(),event.getY() - viewResolver.getY());
+                viewResolver.detectTouchedPoint(event.getX(),event.getY() - viewResolver.getY());
         }
 
         return super.onTouchEvent(event);
@@ -153,7 +168,7 @@ public class ViewActivity extends Activity {
     }
     public void setBackground(){
 
-        if(floor == 1) {
+        if(viewResolver.getFloor() == 1) {
             layout.setBackgroundResource(R.drawable.pietro1);
             layout.invalidate();
         }
