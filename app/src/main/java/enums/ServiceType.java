@@ -12,7 +12,7 @@ public enum ServiceType {
         switch(serviceType){
 
             case GET:
-                return SERVER_PATH + "testData.txt";
+                return SERVER_PATH + "configuration.txt";
             case CHECK_VERSION:
                 return SERVER_PATH + "checkVersion.php";
             case ADD_FICHE:

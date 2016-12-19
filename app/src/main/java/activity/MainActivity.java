@@ -32,10 +32,7 @@ public class MainActivity extends Activity {
         bt2 = (FloatingActionButton)findViewById(R.id.fab2);
         bt3 = (FloatingActionButton)findViewById(R.id.fab3);
         bt4 = (FloatingActionButton)findViewById(R.id.fab4);
-        Intent i = getIntent();
-        String dane = i.getStringExtra("data");
         toViewActivity = new Intent(MainActivity.this, ViewActivity.class);
-        toViewActivity.putExtra("data",dane);
 
         bt4.setOnClickListener(new View.OnClickListener() {
             @Override

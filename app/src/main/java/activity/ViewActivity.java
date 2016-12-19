@@ -45,7 +45,7 @@ public class ViewActivity extends Activity {
         viewResolver = (ViewResolver) findViewById(R.id.drawView);
         layout = (LinearLayout)findViewById(R.id.viewLayout);
         layout.setBackgroundResource(R.drawable.pietro1);
-        viewResolver.setDataJSON(i.getStringExtra("data"));
+
 
         // trzeba dodać getExtras dla grafiki i domyślnie wczytać pierwszą
 
