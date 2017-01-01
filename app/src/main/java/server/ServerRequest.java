@@ -100,14 +100,14 @@ public class ServerRequest extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        try {
-            JSONObject receivedData = new JSONObject(result);
+     //   try {
+        //    JSONObject receivedData = new JSONObject(result);
            // JSONObject metaData = receivedData.getJSONObject("metaData");
            // int idName = metaData.getInt("idName");
 
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+      //  } catch (JSONException e) {
+       //     e.printStackTrace();
+      //  }
         if (serverRequestListener != null) {
             //if (code != 100)
                // serverRequestListener.onError(code, description);

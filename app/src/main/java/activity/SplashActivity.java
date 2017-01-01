@@ -1,15 +1,15 @@
 package activity;
 
 import android.app.Activity;
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.widget.Toast;
-
 import com.inz.przemek.dijkstra.R;
 
 import org.json.JSONArray;
@@ -18,18 +18,16 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import domain.Point;
 import enums.ServiceType;
 import server.Parameters;
 import server.ServerRequest;
 
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by Przemek on 11.10.2016.
@@ -46,10 +44,21 @@ public class SplashActivity extends Activity {
         toMainActivity = new Intent(this,MainActivity.class);
 
         if(isNetworkAvailable()){
-            new ServerRequest(ServiceType.GET, new Parameters()).setServerRequestListener(new ServerRequest.ServerRequestListener() {
+            new ServerRequest(ServiceType.GET_CONFIGURATION, new Parameters()).setServerRequestListener(new ServerRequest.ServerRequestListener() {
                 @Override
                 public void onSuccess(String json) {
-                  writeToSDFile("testowyJSON",json);
+                    writeToSDFile("testowyJSON",json);
+                    try {
+                        JSONObject receivedData = new JSONObject(json);
+                        JSONObject metaData = receivedData.getJSONObject("metaData");
+                        JSONArray floorsImages = metaData.getJSONArray("floorsImages");
+                        for(int i = 0; i < floorsImages.length(); i ++)
+                        {
+                            downloadFile(ServiceType.getURL(ServiceType.DOWNLOAD_FILE) + floorsImages.get(i));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     startActivity(toMainActivity);
                 }
 
@@ -105,4 +114,22 @@ public class SplashActivity extends Activity {
             e.printStackTrace();
         }
     }
+
+    public void downloadFile(String uRl) {
+
+        DownloadManager mgr = (DownloadManager) this.getSystemService(Context.DOWNLOAD_SERVICE);
+
+        Uri downloadUri = Uri.parse(uRl);
+        DownloadManager.Request request = new DownloadManager.Request(
+                downloadUri);
+
+        request.setAllowedNetworkTypes(
+                DownloadManager.Request.NETWORK_WIFI
+                        | DownloadManager.Request.NETWORK_MOBILE)
+                .setDestinationInExternalPublicDir("/FindYourWay", downloadUri.getLastPathSegment());
+
+        mgr.enqueue(request);
+
+    }
+
 }

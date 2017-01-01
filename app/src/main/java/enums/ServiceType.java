@@ -2,21 +2,21 @@ package enums;
 
 
 public enum ServiceType {
-    GET,
+    GET_CONFIGURATION,
     CHECK_VERSION,
-    ADD_FICHE;
+    DOWNLOAD_FILE;
 
     public static final String SERVER_PATH = "http://www.przem94.ayz.pl/dijkstra/";
 
     public static String getURL(ServiceType serviceType){
         switch(serviceType){
 
-            case GET:
+            case GET_CONFIGURATION:
                 return SERVER_PATH + "configuration.txt";
             case CHECK_VERSION:
                 return SERVER_PATH + "checkVersion.php";
-            case ADD_FICHE:
-                return SERVER_PATH + "upDateDatabase.php";
+            case DOWNLOAD_FILE:
+                return SERVER_PATH + "uploads/";
         }
         return "Service path is invalid";
     }

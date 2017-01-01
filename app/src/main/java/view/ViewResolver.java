@@ -42,11 +42,7 @@ public class ViewResolver extends View {
     private List<Integer> solutionPath;
     private Point source;
     private Point destination;
-    private boolean isMiddleSource = false;
-    private int[][] verticesPositions;
-    private String name;
     private int floor = 1;
-    private boolean shouldShowWarning = true;
     private String dataJSON;
     public static final int X_CORRECTION = 3;
     private List<Connection> connections;
@@ -73,15 +69,9 @@ public class ViewResolver extends View {
         points = new ArrayList<>();
         connections = new ArrayList<>();
 
-parseJSON(readJSONFromFIle("testowyJSON"));
-
-
-
-
-reindex();
-
-
-
+        parseJSON(readJSONFromFIle("testowyJSON"));
+        System.out.println("JSON" + readJSONFromFIle("testowyJSON"));
+        reindex();
     }
 
 
@@ -90,17 +80,6 @@ reindex();
             if (point.getFloor() == floor)
                 point.draw(canvas);
         }
-    }
-
-    public void isSymmetric(int A[][]) {
-        for (int row = 0; row < A.length; row++) {
-            for (int col = 0; col < row; col++) {
-                if (A[row][col] != A[col][row]) {
-                    System.out.println("NIE SYMETRYCZNA");
-                }
-            }
-        }
-        System.out.println("SYMETRYCZNA");
     }
 
     // Tworzy listę punktów z otrzymanej ścieżki, które są na danym piętrze
@@ -124,8 +103,8 @@ reindex();
         }
     }
 
-    public void drawAllConnections(Canvas canvas){
-        if(showAllConnections) {
+    public void drawAllConnections(Canvas canvas) {
+        if (showAllConnections) {
             Paint allPathPaint = new Paint();
             allPathPaint.setColor(Color.LTGRAY);
             allPathPaint.setStrokeWidth(LINE_WIDTH);
@@ -168,7 +147,7 @@ reindex();
             source.setSelected(true);
             destination.setSelected(true);
 
-           // System.out.println("S: " + source.getId() + " D: " + destination.getId());
+            // System.out.println("S: " + source.getId() + " D: " + destination.getId());
         }
     }
 
@@ -188,19 +167,19 @@ reindex();
         });
     }
 
-    private int findPoint(String pos){
+    private int findPoint(String pos) {
         int positionn = 1;
-        for (Point p : points){
+        for (Point p : points) {
             if (p.getName().equals(pos)) {
                 positionn = p.getId();
-               // System.out.println("znalazłem: " + p.getName() + " id: " + p.getId());
+                // System.out.println("znalazłem: " + p.getName() + " id: " + p.getId());
                 break;
             }
         }
-        return  positionn;
+        return positionn;
     }
 
-    public void setDestination( final String destinationId) {
+    public void setDestination(final String destinationId) {
         if (destination != null) {
             destination.setSelected(false);
         }
@@ -281,17 +260,8 @@ reindex();
         alert11.show();
     }
 
-    public boolean isShouldShowWarning() {
-        return shouldShowWarning;
-    }
-
-    public void setShouldShowWarning(boolean shouldShowWarning) {
-        this.shouldShowWarning = shouldShowWarning;
-    }
-
     public void parseJSON(String json) {
         try {
-          //  System.out.println(json);
             JSONObject receivedData = new JSONObject(json);
             JSONArray pointsArray = receivedData.getJSONArray("pointsArray");
             JSONArray connectionsArr = receivedData.getJSONArray("connectionsArray");
@@ -314,7 +284,7 @@ reindex();
                 JSONObject c = connectionsArr.getJSONObject(i);
                 int from = c.getInt("source");
                 int to = c.getInt("destination");
-                Connection tmp = new Connection(from,to);
+                Connection tmp = new Connection(from, to);
                 connections.add(tmp);
                 int distance = c.getInt("distance");
                 dijkstraGraph[from][to] = distance;
@@ -323,10 +293,9 @@ reindex();
 
             JSONObject metaData = receivedData.getJSONObject("metaData");
             numberOfFloor = metaData.getInt("numberOfFloor");
-            System.out.println("FLOOORS  " + numberOfFloor);
 
             setSourceAndDestinationIfNull(0, 1);
-            dijkstraAlgorithm = new DijkstraAlgorithm(source.getId(), destination.getId(),pointsArray.length());
+            dijkstraAlgorithm = new DijkstraAlgorithm(source.getId(), destination.getId(), pointsArray.length());
             dijkstraAlgorithm.dijkstra(dijkstraGraph);
             solutionPath = dijkstraAlgorithm.getSolutionPath();
 
@@ -351,7 +320,7 @@ reindex();
         this.dataJSON = dataJSON;
     }
 
-    public  ArrayList<Point> getPoints() {
+    public ArrayList<Point> getPoints() {
         return points;
     }
 
@@ -361,9 +330,9 @@ reindex();
     }
 
     public void setFloor(int floor) {
-        if(floor >= numberOfFloor)
+        if (floor >= numberOfFloor)
             floor = numberOfFloor;
-        if(floor <=1)
+        if (floor <= 1)
             floor = 1;
         this.floor = floor;
     }
@@ -377,22 +346,22 @@ reindex();
         this.showAllConnections = showAllConnections;
     }
 
-    private void reindex()
-    {    Collections.sort(points, new Comparator<Point>() {
-        @Override
-        public int compare(Point p1, Point p2) {
-            if (p1.getId() > p2.getId())
-                return 1;
-            if (p1.getId() < p2.getId())
-                return -1;
-            return 0;
-        }
-    });
+    private void reindex() {
+        Collections.sort(points, new Comparator<Point>() {
+            @Override
+            public int compare(Point p1, Point p2) {
+                if (p1.getId() > p2.getId())
+                    return 1;
+                if (p1.getId() < p2.getId())
+                    return -1;
+                return 0;
+            }
+        });
     }
 
     public String readJSONFromFIle(String fileName) {
         File root = Environment.getExternalStorageDirectory();
-        File file = new File(root,fileName + ".txt");
+        File file = new File(root, fileName + ".txt");
         StringBuilder text = new StringBuilder();
 
         try {
@@ -402,11 +371,10 @@ reindex();
                 text.append(line);
             }
             br.close();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        return  text.toString();
+        return text.toString();
     }
 
     @Override
