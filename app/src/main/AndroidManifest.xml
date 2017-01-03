@@ -33,6 +33,13 @@
         <activity android:name="activity.ViewActivity"
             android:screenOrientation="portrait" >
         </activity>
+        <activity android:name="activity.ManualActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity android:name="activity.AboutActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+
     </application>
 
 </manifest>

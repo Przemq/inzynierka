@@ -6,4 +6,8 @@
     <color name="colorAccent">#FF4081</color>
     <color name="lightBlue">#FF66FF</color>
     <color name="navBG">#CFE2E8</color>
+    <color name="white">#FFFFFF</color>
+    <color name="bg">#79ff4d</color>
+    <color name="green">#7dc442</color>
+    <color name="darkGreen">#3b7c06</color>
 </resources>

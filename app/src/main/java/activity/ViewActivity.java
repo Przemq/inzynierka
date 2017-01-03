@@ -3,8 +3,12 @@ package activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -14,9 +18,15 @@ import android.widget.TextView;
 
 import com.inz.przemek.dijkstra.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 import java.util.Objects;
 
 import domain.Point;
+import utils.IOHelper;
 import view.ViewResolver;
 
 /**
@@ -26,6 +36,8 @@ public class ViewActivity extends Activity {
     private ViewResolver viewResolver;
     private TextView tv_floor;
     private int floor = 1;
+    private HashMap<Integer,String> graphicsMap;
+    private int numberOfFloor = 0;
     LinearLayout layout;
 
 
@@ -38,26 +50,41 @@ public class ViewActivity extends Activity {
         Button button_source = (Button) findViewById(R.id.source_button);
         Button button_destination = (Button) findViewById(R.id.destination_button);
         Button button_show_all = (Button) findViewById(R.id.button_show_all);
-        Intent i = getIntent();
+        graphicsMap = new HashMap<>();
+
+        try {
+            JSONObject json = new JSONObject( IOHelper.readJSONFromFIle("testowyJSON"));
+            JSONObject metaData = json.getJSONObject("metaData");
+            JSONArray graphicsNames =  metaData.getJSONArray("floorsImages");
+            numberOfFloor = metaData.getInt("numberOfFloor");
+
+            for (int i = 0; i < graphicsNames.length(); i++){
+                graphicsMap.put(i+1,graphicsNames.getString(i));
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         tv_floor = (TextView)findViewById(R.id.tv_floor);
         tv_floor.setText(String.valueOf(floor));
         viewResolver = (ViewResolver) findViewById(R.id.drawView);
         layout = (LinearLayout)findViewById(R.id.viewLayout);
-        layout.setBackgroundResource(R.drawable.pietro1);
+        layout.setBackgroundDrawable(setBackgroundFromSD(graphicsMap.get(1)));
 
 
         // trzeba dodać getExtras dla grafiki i domyślnie wczytać pierwszą
 
-        final ArrayAdapter<String> pointsAdapter = new ArrayAdapter<String>(ViewActivity.this, android.R.layout.select_dialog_singlechoice,viewResolver.getPointsId());
+        final ArrayAdapter<String> pointsAdapter = new ArrayAdapter<>(ViewActivity.this, android.R.layout.select_dialog_singlechoice,viewResolver.getPointsId());
 
         button_up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 floor++;
+                if(floor >= numberOfFloor) floor = numberOfFloor;
                 viewResolver.setFloor(viewResolver.getFloor() + 1);
                 tv_floor.setText(String.valueOf(viewResolver.getFloor()));
-                setBackground();
+                layout.setBackgroundDrawable(setBackgroundFromSD(graphicsMap.get(floor)));
                 viewResolver.invalidate();
             }
         });
@@ -65,9 +92,11 @@ public class ViewActivity extends Activity {
         button_down.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                floor--;
+                if(floor <=1) floor =1;
                 viewResolver.setFloor(viewResolver.getFloor() - 1);
                 tv_floor.setText(String.valueOf(viewResolver.getFloor()));
-                setBackground();
+                layout.setBackgroundDrawable(setBackgroundFromSD(graphicsMap.get(floor)));
                 viewResolver.invalidate();
             }
         });
@@ -117,7 +146,7 @@ public class ViewActivity extends Activity {
             public void onClick(DialogInterface dialog, int which) {
                 viewResolver.invalidate();
                 String pos = adapter.getItem(which);
-                System.out.println(pos);
+                //System.out.println(pos);
                 viewResolver.invalidate();
 
 
@@ -166,14 +195,14 @@ public class ViewActivity extends Activity {
         return super.onTouchEvent(event);
 
     }
-    public void setBackground(){
 
-        if(viewResolver.getFloor() == 1) {
-            layout.setBackgroundResource(R.drawable.pietro1);
-            layout.invalidate();
-        }
-        else layout.setBackgroundResource(R.drawable.pietro2);
-        layout.invalidate();
+
+    private BitmapDrawable setBackgroundFromSD(String fileName){
+        String pathName =  Environment.getExternalStorageDirectory().getPath() + "/FindYourWay/" + fileName ;
+        Resources res = getResources();
+        Bitmap bitmap = BitmapFactory.decodeFile(pathName);
+        BitmapDrawable bd = new BitmapDrawable(res, bitmap);
+        return bd;
     }
 
 

@@ -27,7 +27,7 @@
             android:id="@+id/fab1"
             app:backgroundTint="@color/lightBlue"
             android:layout_width="wrap_content"
-            android:src="@drawable/ic_about"
+            android:src="@mipmap/ic_exit"
             android:background="@color/colorPrimaryDark"
             android:layout_height="wrap_content" />
 
@@ -35,12 +35,14 @@
             android:id="@+id/fab2"
             android:layout_width="wrap_content"
             android:src="@drawable/ic_about"
+            app:backgroundTint="@color/green"
             android:layout_height="wrap_content" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab3"
             android:layout_width="wrap_content"
-            android:src="@drawable/ic_about"
+            android:src="@mipmap/ic_manual"
+            app:backgroundTint="@color/darkGreen"
             android:layout_height="wrap_content" />
 
         <android.support.design.widget.FloatingActionButton

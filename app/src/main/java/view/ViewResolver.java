@@ -7,18 +7,15 @@ import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.Environment;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -30,6 +27,7 @@ import domain.Connection;
 import domain.Point;
 
 import static domain.Point.LINE_WIDTH;
+import static utils.IOHelper.readJSONFromFIle;
 
 /**
  * Created by Przemek on 03.05.2016.
@@ -43,7 +41,6 @@ public class ViewResolver extends View {
     private Point source;
     private Point destination;
     private int floor = 1;
-    private String dataJSON;
     public static final int X_CORRECTION = 3;
     private List<Connection> connections;
     private int numberOfFloor = 0;
@@ -73,7 +70,6 @@ public class ViewResolver extends View {
         System.out.println("JSON" + readJSONFromFIle("testowyJSON"));
         reindex();
     }
-
 
     public void drawPoints(Canvas canvas) {
         for (Point point : points) {
@@ -149,6 +145,8 @@ public class ViewResolver extends View {
 
             // System.out.println("S: " + source.getId() + " D: " + destination.getId());
         }
+        if(clickedPoints.get(0).getId() == clickedPoints.get(1).getId())
+            showWarning("Source and Destination can't be the same points");
     }
 
     public void setSource(String sourceId) {
@@ -312,31 +310,23 @@ public class ViewResolver extends View {
         }
     }
 
-    public String getDataJSON() {
-        return dataJSON;
-    }
-
-    public void setDataJSON(String dataJSON) {
-        this.dataJSON = dataJSON;
-    }
-
     public ArrayList<Point> getPoints() {
         return points;
     }
-
 
     public int getFloor() {
         return floor;
     }
 
     public void setFloor(int floor) {
-        if (floor >= numberOfFloor)
+        if (floor >= numberOfFloor) {
             floor = numberOfFloor;
-        if (floor <= 1)
+        }
+        if (floor <= 1) {
             floor = 1;
+        }
         this.floor = floor;
     }
-
 
     public boolean isShowAllConnections() {
         return showAllConnections;
@@ -359,24 +349,6 @@ public class ViewResolver extends View {
         });
     }
 
-    public String readJSONFromFIle(String fileName) {
-        File root = Environment.getExternalStorageDirectory();
-        File file = new File(root, fileName + ".txt");
-        StringBuilder text = new StringBuilder();
-
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String line;
-            while ((line = br.readLine()) != null) {
-                text.append(line);
-            }
-            br.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return text.toString();
-    }
-
     @Override
     public void onDraw(Canvas canvas) {
         markSourceAndDestination();
@@ -386,5 +358,8 @@ public class ViewResolver extends View {
         setLinesProperties();
         onConstructor();
         drawConnections(canvas, selectPointsToDrawConnections(solutionPath));
+
     }
+
+
 }

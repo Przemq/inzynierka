@@ -20,7 +20,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -35,7 +34,7 @@ import server.ServerRequest;
 
 public class SplashActivity extends Activity {
 
-    Intent toMainActivity;
+    private Intent toMainActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +53,12 @@ public class SplashActivity extends Activity {
                         JSONArray floorsImages = metaData.getJSONArray("floorsImages");
                         for(int i = 0; i < floorsImages.length(); i ++)
                         {
-                            downloadFile(ServiceType.getURL(ServiceType.DOWNLOAD_FILE) + floorsImages.get(i));
+                            File testFile = new File(Environment.getExternalStorageDirectory().getPath() + "/FindYourWay/" + floorsImages.get(i));
+                            if(!testFile.exists()) {
+                                downloadFile(ServiceType.getURL(ServiceType.DOWNLOAD_FILE) + floorsImages.get(i));
+                            }
                         }
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -81,24 +84,6 @@ public class SplashActivity extends Activity {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    public String readJSONFromFIle(String fileName) {
-        File root = Environment.getExternalStorageDirectory();
-        File file = new File(root,fileName + ".txt");
-        StringBuilder text = new StringBuilder();
-
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String line;
-            while ((line = br.readLine()) != null) {
-                text.append(line);
-            }
-            br.close();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        return  text.toString();
-    }
 
     private void writeToSDFile(String fileName, String content){
         File root = android.os.Environment.getExternalStorageDirectory();

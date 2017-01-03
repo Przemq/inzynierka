@@ -17,52 +17,52 @@ import com.inz.przemek.dijkstra.R;
 public class MainActivity extends Activity {
 
 
-    Intent toViewActivity;
+    private Intent toViewActivity;
 
-    FloatingActionButton bt1;
-    FloatingActionButton bt2;
-    FloatingActionButton bt3;
-    FloatingActionButton bt4;
+
+    private FloatingActionButton buttonExit;
+    private FloatingActionButton buttonAbout;
+    private FloatingActionButton buttonManual;
+    private FloatingActionButton viewResolerButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        bt1 = (FloatingActionButton)findViewById(R.id.fab1);
-        bt2 = (FloatingActionButton)findViewById(R.id.fab2);
-        bt3 = (FloatingActionButton)findViewById(R.id.fab3);
-        bt4 = (FloatingActionButton)findViewById(R.id.fab4);
+        buttonExit = (FloatingActionButton) findViewById(R.id.fab1);
+        buttonAbout = (FloatingActionButton) findViewById(R.id.fab2);
+        buttonManual = (FloatingActionButton) findViewById(R.id.fab3);
+        viewResolerButton = (FloatingActionButton) findViewById(R.id.fab4);
         toViewActivity = new Intent(MainActivity.this, ViewActivity.class);
+        final Intent toAboutActivity = new Intent(MainActivity.this, AboutActivity.class);
+        final Intent toManualActivity = new Intent(MainActivity.this, ManualActivity.class);
 
-        bt4.setOnClickListener(new View.OnClickListener() {
+        viewResolerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("1");
                 startActivity(toViewActivity);
             }
         });
 
-        bt2.setOnClickListener(new View.OnClickListener() {
+        buttonAbout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("2");
+                startActivity(toAboutActivity);
+            }
+        });
+
+        buttonManual.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(toManualActivity);
 
             }
         });
 
-        bt3.setOnClickListener(new View.OnClickListener() {
+        buttonExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("3");
-
-            }
-        });
-
-        bt1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("1");
-
+               closeApp();
             }
         });
 
@@ -70,26 +70,32 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-            if(keyCode == KeyEvent.KEYCODE_BACK)
-            {
-                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which){
-                            case DialogInterface.BUTTON_POSITIVE:
-                                android.os.Process.killProcess(android.os.Process.myPid());
-                                break;
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            closeApp();
+        }
 
-                            case DialogInterface.BUTTON_NEGATIVE:
-                                break;
-                        }
-                    }
-                };
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage("Exit, are you sure?").setPositiveButton("Yes", dialogClickListener)
-                        .setNegativeButton("No", dialogClickListener).show();
-            }
         return super.onKeyDown(keyCode, event);
     }
+
+    private void closeApp() {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        android.os.Process.killProcess(android.os.Process.myPid());
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Exit, are you sure?").setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener).show();
+    }
+
+
 }

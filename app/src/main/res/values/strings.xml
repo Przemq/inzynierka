@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">Dijkstra</string>
-    <string name="download_data">Pobieram dane..</string>
+    <string name="download_data">Downloading data..</string>
+    <string name="app_describle">Aplikacja ta służy do znajdowania najkrótszej drogi pomiędzy dwoma punktami. Wystarczy wskazać punkt startowy i docelowy, a aplikacja wzynacyz najkrótsze istniejące połączenie.
+W celu łatwego nawigowania użytkownik może wybrać punktu za pomocą bezpośredniego dontięcia wybranego punktu lub wybrać go z listy.\n\n
+        Użytkownik ma możliwość sprawdzenia sieci istniejących połączeń za pomocą przycisku \"SHOW PATHS\" \n\n
+
+        LEGENDA OZNACZEŃ  \n\n
+
+</string>
 </resources>
