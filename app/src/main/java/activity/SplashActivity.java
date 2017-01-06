@@ -73,7 +73,8 @@ public class SplashActivity extends Activity {
             }).execute();
         }
         else {
-            Toast.makeText(this, "No network, check your connection", Toast.LENGTH_LONG).show();
+            toMainActivity.putExtra("noNetwork","No network. The previous configuration is loaded");
+            startActivity(toMainActivity);
         }
     }
 

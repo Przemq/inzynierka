@@ -40,7 +40,7 @@
             android:layout_alignParentEnd="true"
             android:layout_marginRight="30dp"
             android:layout_marginEnd="30dp"
-            android:background="@mipmap/ic_floor_up"
+            android:background="@mipmap/ic_floor_up3"
             android:id="@+id/button_up"
             android:layout_marginTop="9dp" />
 
@@ -51,7 +51,7 @@
             android:layout_alignLeft="@+id/button_up"
             android:layout_alignStart="@+id/button_up"
             android:layout_marginBottom="9dp"
-            android:background="@mipmap/ic_floor_down"
+            android:background="@mipmap/ic_floor_down_grey"
             android:id="@+id/button_down" />
 
         <TextView
@@ -64,8 +64,8 @@
             android:layout_centerVertical="true"
             android:layout_alignRight="@+id/button_down"
             android:layout_alignEnd="@+id/button_down"
-            android:layout_marginRight="39dp"
-            android:layout_marginEnd="39dp" />
+            android:layout_marginRight="37dp"
+            android:layout_marginEnd="37dp" />
 
         <Button
             android:text="Show Paths"

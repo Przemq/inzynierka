@@ -18,7 +18,6 @@ public class Point extends View {
     public static final boolean ANTI_ALIAS = true;
     public static final float TEXT_SIZE = 25f;
     public static final float RADIUS = 9f;
-    public static final float SPACE_BETWEEN_POINT_AND_TEXT = 3.5f;
     public static final float LINE_WIDTH = 3f;
 
     private boolean isSelected;
@@ -161,7 +160,7 @@ public class Point extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawText(name, getX() + SPACE_BETWEEN_POINT_AND_TEXT * RADIUS, getY() + RADIUS, textStyle);
+        canvas.drawText(name, getX() + 2.8f * RADIUS + name.length()*3, getY() + RADIUS, textStyle);
         canvas.drawCircle(getX(), getY(), RADIUS, pointStyle);
     }
 }

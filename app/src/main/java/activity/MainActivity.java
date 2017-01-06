@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import com.inz.przemek.dijkstra.R;
 
@@ -36,6 +37,16 @@ public class MainActivity extends Activity {
         toViewActivity = new Intent(MainActivity.this, ViewActivity.class);
         final Intent toAboutActivity = new Intent(MainActivity.this, AboutActivity.class);
         final Intent toManualActivity = new Intent(MainActivity.this, ManualActivity.class);
+        Intent fromSplashActivity = getIntent();
+        Bundle extras = fromSplashActivity.getExtras();
+
+        if (extras != null) {
+            if (extras.containsKey("noNetwork")) {
+                String msg = extras.getString("noNetwork");
+                Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG).show();
+            }
+        }
+
 
         viewResolerButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -45,8 +45,8 @@ public class ViewActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view);
-        Button button_up = (Button) findViewById(R.id.button_up);
-        Button button_down = (Button) findViewById(R.id.button_down);
+        final Button button_up = (Button) findViewById(R.id.button_up);
+        final Button button_down = (Button) findViewById(R.id.button_down);
         Button button_source = (Button) findViewById(R.id.source_button);
         Button button_destination = (Button) findViewById(R.id.destination_button);
         Button button_show_all = (Button) findViewById(R.id.button_show_all);
@@ -73,15 +73,17 @@ public class ViewActivity extends Activity {
         layout.setBackgroundDrawable(setBackgroundFromSD(graphicsMap.get(1)));
 
 
-        // trzeba dodać getExtras dla grafiki i domyślnie wczytać pierwszą
-
         final ArrayAdapter<String> pointsAdapter = new ArrayAdapter<>(ViewActivity.this, android.R.layout.select_dialog_singlechoice,viewResolver.getPointsId());
 
         button_up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 floor++;
-                if(floor >= numberOfFloor) floor = numberOfFloor;
+                if(floor >= numberOfFloor){
+                    floor = numberOfFloor;
+                    v.setBackgroundDrawable(getResources().getDrawable(R.mipmap.ic_floor_up_grey));
+                }
+                button_down.setBackgroundDrawable(getResources().getDrawable(R.mipmap.ic_floor_down));
                 viewResolver.setFloor(viewResolver.getFloor() + 1);
                 tv_floor.setText(String.valueOf(viewResolver.getFloor()));
                 layout.setBackgroundDrawable(setBackgroundFromSD(graphicsMap.get(floor)));
@@ -93,7 +95,12 @@ public class ViewActivity extends Activity {
             @Override
             public void onClick(View v) {
                 floor--;
-                if(floor <=1) floor =1;
+                if(floor <=1){
+                    floor =1;
+                    v.setBackgroundDrawable(getResources().getDrawable(R.mipmap.ic_floor_down_grey));
+                }
+                button_up.setBackgroundDrawable(getResources().getDrawable(R.mipmap.ic_floor_up));
+
                 viewResolver.setFloor(viewResolver.getFloor() - 1);
                 tv_floor.setText(String.valueOf(viewResolver.getFloor()));
                 layout.setBackgroundDrawable(setBackgroundFromSD(graphicsMap.get(floor)));
