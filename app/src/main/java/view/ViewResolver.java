@@ -62,7 +62,7 @@ public class ViewResolver extends View {
         onConstructor();
     }
 
-    public void onConstructor() {
+    private void onConstructor() {
         points = new ArrayList<>();
         connections = new ArrayList<>();
 
@@ -71,7 +71,7 @@ public class ViewResolver extends View {
         reindex();
     }
 
-    public void drawPoints(Canvas canvas) {
+    private void drawPoints(Canvas canvas) {
         for (Point point : points) {
             if (point.getFloor() == floor)
                 point.draw(canvas);
@@ -79,7 +79,7 @@ public class ViewResolver extends View {
     }
 
     // Tworzy listę punktów z otrzymanej ścieżki, które są na danym piętrze
-    public ArrayList<Point> selectPointsToDrawConnections(List<Integer> solutionPath) {
+    private ArrayList<Point> selectPointsToDrawConnections(List<Integer> solutionPath) {
         ArrayList<Point> pointsToConnectOnFloor = new ArrayList<Point>();
         for (Integer pointOnPath : solutionPath) {
             for (Point p : points) {
@@ -91,7 +91,7 @@ public class ViewResolver extends View {
         return pointsToConnectOnFloor;
     }
 
-    public void drawConnections(Canvas canvas, ArrayList<Point> list) {
+    private void drawConnections(Canvas canvas, ArrayList<Point> list) {
         for (int i = 0; i < list.size(); i++) {
             if (i < list.size() - 1) {
                 canvas.drawLine(list.get(i).getX(), list.get(i).getY(), list.get(i + 1).getX(), list.get(i + 1).getY(), paint);
@@ -99,7 +99,7 @@ public class ViewResolver extends View {
         }
     }
 
-    public void drawAllConnections(Canvas canvas) {
+    private void drawAllConnections(Canvas canvas) {
         if (showAllConnections) {
             Paint allPathPaint = new Paint();
             allPathPaint.setColor(Color.LTGRAY);
@@ -130,7 +130,7 @@ public class ViewResolver extends View {
         invalidate();
     }
 
-    public void addPointsToQueue(Point closestPoint) {
+    private void addPointsToQueue(Point closestPoint) {
         if (closestPoint != null) {
             clickedPoints.add(closestPoint);
             if (clickedPoints.size() > 2) {
@@ -201,7 +201,7 @@ public class ViewResolver extends View {
     }
 
     //wyznaczanie żródła i celu oraz ich kolorowanie
-    public void markSourceAndDestination() {
+    private void markSourceAndDestination() {
         for (Point p : points) {
             if (p.getId() == destination.getId() || p.getId() == source.getId())// czy są aktualnmie wybrane
                 p.setSelected(true);
@@ -219,7 +219,7 @@ public class ViewResolver extends View {
         }
     }
 
-    public void colorMiddle() {
+    private void colorMiddle() {
         for (Point p : selectPointsToDrawConnections(solutionPath)) {
             if (p.isMiddleSource())
                 p.setMiddleSource(true);
@@ -227,13 +227,13 @@ public class ViewResolver extends View {
 
     }
 
-    public void setLinesProperties() {
+    private void setLinesProperties() {
         paint.setColor(Color.BLACK);
         paint.setStrokeWidth(LINE_WIDTH);
         paint.setAntiAlias(true);
     }
 
-    public void setSourceAndDestinationIfNull(int source, int destination) {
+    private void setSourceAndDestinationIfNull(int source, int destination) {
         if (this.source == null || this.destination == null) {
             this.source = points.get(source);
             this.destination = points.get(destination);
@@ -242,7 +242,7 @@ public class ViewResolver extends View {
         }
     }
 
-    public void showWarning(String message) {
+    private void showWarning(String message) {
         AlertDialog.Builder builder1 = new AlertDialog.Builder(this.getContext());
         builder1.setMessage(message);
         builder1.setCancelable(true);
@@ -258,7 +258,7 @@ public class ViewResolver extends View {
         alert11.show();
     }
 
-    public void parseJSON(String json) {
+    private void parseJSON(String json) {
         try {
             JSONObject receivedData = new JSONObject(json);
             JSONArray pointsArray = receivedData.getJSONArray("pointsArray");
@@ -349,6 +349,13 @@ public class ViewResolver extends View {
         });
     }
 
+    private void showUpDownArrow(){
+        if(destination.getFloor() > source.getFloor())
+            System.out.println("UP");
+        if(destination.getFloor() < source.getFloor())
+            System.out.println("DOWN");
+    }
+
     @Override
     public void onDraw(Canvas canvas) {
         markSourceAndDestination();
@@ -358,6 +365,7 @@ public class ViewResolver extends View {
         setLinesProperties();
         onConstructor();
         drawConnections(canvas, selectPointsToDrawConnections(solutionPath));
+        showUpDownArrow();
 
     }
 

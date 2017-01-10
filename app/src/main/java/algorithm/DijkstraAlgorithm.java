@@ -32,10 +32,10 @@ public class DijkstraAlgorithm {
         return minIndex;
     }
 
-    public void printSolution(int distance[], int n) {
+    public void printSolution(int distance[]) {
         System.out.println("Vertex   Distance from Source");
         for (int i = 0; i < numberOfVertex; i++)
-            System.out.println(i + " \t\t " + distance[i]);  // do poprawy po napisaniu rekonstrukcji ścieżki
+            System.out.println(i + " \t\t " + distance[i]);
     }
 
     public List pathReconstruction(int parent[], int source, int destination){
@@ -80,13 +80,7 @@ public class DijkstraAlgorithm {
         return previous;
     }
 
-    public void setSourceVertex(int sourceVertex) {
-        this.sourceVertex = sourceVertex;
-    }
 
-    public void setDestinationVertex(int destinationVertex) {
-        this.destinationVertex = destinationVertex;
-    }
     public List<Integer> getSolutionPath() {
         return solutionPath;
     }

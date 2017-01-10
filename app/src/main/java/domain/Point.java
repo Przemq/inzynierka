@@ -14,11 +14,11 @@ public class Point extends View {
     private int floor;
     private boolean isMiddleSource;
     private String name;
-    public static final float EDGE_WIDTH = 3f;
+    public static final float EDGE_WIDTH = 2.0f;
     public static final boolean ANTI_ALIAS = true;
-    public static final float TEXT_SIZE = 25f;
-    public static final float RADIUS = 9f;
-    public static final float LINE_WIDTH = 3f;
+    public static final float TEXT_SIZE = 22f;
+    public static final float RADIUS = 7f;
+    public static final float LINE_WIDTH = 2.0f;
 
     private boolean isSelected;
     private boolean isSource;
@@ -160,7 +160,7 @@ public class Point extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawText(name, getX() + 2.8f * RADIUS + name.length()*3, getY() + RADIUS, textStyle);
+        canvas.drawText(name, getX() + 3.0f * RADIUS + name.length()*3, getY() + RADIUS, textStyle);
         canvas.drawCircle(getX(), getY(), RADIUS, pointStyle);
     }
 }
