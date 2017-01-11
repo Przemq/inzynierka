@@ -12,6 +12,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+import com.inz.przemek.dijkstra.R;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,6 +26,7 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
+import activity.ViewActivity;
 import algorithm.DijkstraAlgorithm;
 import domain.Connection;
 import domain.Point;
@@ -45,6 +50,8 @@ public class ViewResolver extends View {
     private List<Connection> connections;
     private int numberOfFloor = 0;
     private boolean showAllConnections = false;
+    private ViewActivity viewActivity;
+
 
 
     public ViewResolver(Context context) {
@@ -63,6 +70,7 @@ public class ViewResolver extends View {
     }
 
     private void onConstructor() {
+        viewActivity = (ViewActivity)getContext();
         points = new ArrayList<>();
         connections = new ArrayList<>();
 
@@ -328,6 +336,8 @@ public class ViewResolver extends View {
         this.floor = floor;
     }
 
+
+
     public boolean isShowAllConnections() {
         return showAllConnections;
     }
@@ -350,10 +360,12 @@ public class ViewResolver extends View {
     }
 
     private void showUpDownArrow(){
-        if(destination.getFloor() > source.getFloor())
-            System.out.println("UP");
-        if(destination.getFloor() < source.getFloor())
-            System.out.println("DOWN");
+        if(destination.getFloor() > floor) {
+            viewActivity.showUpPrompt();
+        }
+        if(destination.getFloor() < floor){
+            viewActivity.showDownPrompt();
+        }
     }
 
     @Override

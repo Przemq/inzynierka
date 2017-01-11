@@ -16,6 +16,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.inz.przemek.dijkstra.R;
 
 import org.json.JSONArray;
@@ -38,7 +40,9 @@ public class ViewActivity extends Activity {
     private int floor = 1;
     private HashMap<Integer,String> graphicsMap;
     private int numberOfFloor = 0;
+
     LinearLayout layout;
+
 
 
     @Override
@@ -75,6 +79,7 @@ public class ViewActivity extends Activity {
 
         final ArrayAdapter<String> pointsAdapter = new ArrayAdapter<>(ViewActivity.this, android.R.layout.select_dialog_singlechoice,viewResolver.getPointsId());
 
+
         button_up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,6 +90,7 @@ public class ViewActivity extends Activity {
                 }
                 button_down.setBackgroundDrawable(getResources().getDrawable(R.mipmap.ic_floor_down));
                 viewResolver.setFloor(viewResolver.getFloor() + 1);
+               // setUserInfo(viewResolver.getUserInfo());
                 tv_floor.setText(String.valueOf(viewResolver.getFloor()));
                 layout.setBackgroundDrawable(setBackgroundFromSD(graphicsMap.get(floor)));
                 viewResolver.invalidate();
@@ -102,6 +108,7 @@ public class ViewActivity extends Activity {
                 button_up.setBackgroundDrawable(getResources().getDrawable(R.mipmap.ic_floor_up));
 
                 viewResolver.setFloor(viewResolver.getFloor() - 1);
+               // setUserInfo(viewResolver.getUserInfo());
                 tv_floor.setText(String.valueOf(viewResolver.getFloor()));
                 layout.setBackgroundDrawable(setBackgroundFromSD(graphicsMap.get(floor)));
                 viewResolver.invalidate();
@@ -132,6 +139,7 @@ public class ViewActivity extends Activity {
                 viewResolver.invalidate();
             }
         });
+
 
     }
 
@@ -164,6 +172,17 @@ public class ViewActivity extends Activity {
         builderSingle.show();
     }
 
+    public void showUpPrompt(){
+        YoYo.with(Techniques.Pulse)
+                .duration(1500)
+                .playOn(findViewById(R.id.button_up));
+    }
+    public void showDownPrompt(){
+        YoYo.with(Techniques.Pulse)
+                .duration(1500)
+                .playOn(findViewById(R.id.button_down));
+    }
+
     public void showDestinationList(final ArrayAdapter<String> adapter, String header){
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(ViewActivity.this);
         builderSingle.setIcon(R.drawable.ic_action_name);
@@ -191,19 +210,6 @@ public class ViewActivity extends Activity {
         builderSingle.show();
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if(event.getAction() == MotionEvent.ACTION_DOWN){
-            //System.out.println(event.getX()+" : "+event.getY());
-            if(event.getY() < viewResolver.getHeight())
-                viewResolver.detectTouchedPoint(event.getX(),event.getY() - viewResolver.getY());
-        }
-
-        return super.onTouchEvent(event);
-
-    }
-
-
     private BitmapDrawable setBackgroundFromSD(String fileName){
         String pathName =  Environment.getExternalStorageDirectory().getPath() + "/FindYourWay/" + fileName ;
         Resources res = getResources();
@@ -212,6 +218,13 @@ public class ViewActivity extends Activity {
         return bd;
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if(event.getAction() == MotionEvent.ACTION_DOWN){
+            if(event.getY() < viewResolver.getHeight())
+                viewResolver.detectTouchedPoint(event.getX(),event.getY() - viewResolver.getY());
+        }
+        return super.onTouchEvent(event);
 
-
+    }
 }
