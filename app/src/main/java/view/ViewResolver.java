@@ -47,6 +47,7 @@ public class ViewResolver extends View {
     private Point destination;
     private int floor = 1;
     public static final int X_CORRECTION = 3;
+    public static final int Y_CORRECTION = 10;
     private List<Connection> connections;
     private int numberOfFloor = 0;
     private boolean showAllConnections = false;
@@ -282,7 +283,7 @@ public class ViewResolver extends View {
                 float yPosition = (float) p.getDouble("yPosition");
                 int floor = p.getInt("floor");
                 boolean isMiddleSource = p.getBoolean("isMiddleSource");
-                Point pt = new Point(this.getContext(), id, name, xPosition + X_CORRECTION, yPosition, floor, isMiddleSource);
+                Point pt = new Point(this.getContext(), id, name, xPosition + X_CORRECTION, yPosition + Y_CORRECTION, floor, isMiddleSource);
                 points.add(pt);
             }
 

@@ -223,6 +223,7 @@ public class ViewActivity extends Activity {
         if(event.getAction() == MotionEvent.ACTION_DOWN){
             if(event.getY() < viewResolver.getHeight())
                 viewResolver.detectTouchedPoint(event.getX(),event.getY() - viewResolver.getY());
+            System.out.println("H: " + viewResolver.getHeight() + "W: " + viewResolver.getWidth());
         }
         return super.onTouchEvent(event);
 

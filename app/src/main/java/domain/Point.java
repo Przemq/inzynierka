@@ -161,6 +161,6 @@ public class Point extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         canvas.drawText(name, getX() + 3.0f * RADIUS + name.length()*3, getY() + RADIUS, textStyle);
-        canvas.drawCircle(getX(), getY(), RADIUS, pointStyle);
+        canvas.drawCircle(getX(), getY() , RADIUS, pointStyle);
     }
 }
