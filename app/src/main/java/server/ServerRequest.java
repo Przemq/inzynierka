@@ -29,8 +29,6 @@ public class ServerRequest extends AsyncTask<Void, Void, String> {
     private ServiceType serviceType;
     private Parameters parameters;
     private ServerRequestListener serverRequestListener;
-    private int code;
-    private String description;
 
     public ServerRequest(ServiceType serviceType, Parameters parameters) {
         this.serviceType = serviceType;
@@ -56,7 +54,7 @@ public class ServerRequest extends AsyncTask<Void, Void, String> {
             connection.setDoInput(true);
             connection.setDoOutput(true);
             connection.setConnectTimeout(10000);
-            HashMap<String,String> params = new HashMap<String,String>();
+            HashMap<String,String> params = new HashMap<>();
             for (String key : parameters.getParameters().keySet()) {
                 params.put(key, parameters.getParameters().get(key));
             }
@@ -100,18 +98,8 @@ public class ServerRequest extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-     //   try {
-        //    JSONObject receivedData = new JSONObject(result);
-           // JSONObject metaData = receivedData.getJSONObject("metaData");
-           // int idName = metaData.getInt("idName");
 
-      //  } catch (JSONException e) {
-       //     e.printStackTrace();
-      //  }
         if (serverRequestListener != null) {
-            //if (code != 100)
-               // serverRequestListener.onError(code, description);
-           // else
                 serverRequestListener.onSuccess(result);
         }
     }

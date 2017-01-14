@@ -10,16 +10,20 @@ import java.util.List;
 public class DijkstraAlgorithm {
     private int sourceVertex;
     private int destinationVertex;
-    int numberOfVertex;
+    private int numberOfVertex;
     private List<Integer> solutionPath;
+    private int[][] matrix;
 
-    public DijkstraAlgorithm(int source, int destination, int numberOfVertex) {
+    public DijkstraAlgorithm(int source, int destination, int numberOfVertex, int[][] matrix) {
         this.sourceVertex = source;
         this.destinationVertex = destination;
         this.numberOfVertex = numberOfVertex;
+        this.matrix = matrix;
+
+        calculateDijkstra(matrix);
     }
 
-    public int findMinimalDistanceIndex(int distanceArray[], Boolean processedVertex[]) {
+    private int findMinimalDistanceIndex(int distanceArray[], Boolean processedVertex[]) {
         int minDistance = Integer.MAX_VALUE;
         int minIndex = -1;
 
@@ -38,8 +42,33 @@ public class DijkstraAlgorithm {
             System.out.println(i + " \t\t " + distance[i]);
     }
 
-    public List pathReconstruction(int parent[], int source, int destination){
-        solutionPath = new ArrayList<Integer>();
+    private int[] calculateDijkstra(int matrix[][]) {
+        int distance[] = new int[numberOfVertex];
+        Boolean processedVertex[] = new Boolean[numberOfVertex];
+        int previous[] = new int[numberOfVertex];
+        for (int i = 0; i < numberOfVertex; i++) {
+            distance[i] = Integer.MAX_VALUE;
+            processedVertex[i] = false;
+            previous[i] = -1;
+        }
+        distance[sourceVertex] = 0;
+        for (int vertex = 0; vertex < numberOfVertex - 1; vertex++) {
+            int u = findMinimalDistanceIndex(distance, processedVertex);
+            processedVertex[u] = true;
+            for (int v = 0; v < numberOfVertex; v++) {
+                if (!processedVertex[v] && matrix[u][v] != 0 && distance[u] != Integer.MAX_VALUE &&
+                        distance[u] + matrix[u][v] < distance[v]) {
+                    distance[v] = distance[u] + matrix[u][v];
+                    previous[v] = u;
+                }
+            }
+        }
+        pathReconstruction(previous,sourceVertex,destinationVertex);
+        return previous;
+    }
+
+    private List pathReconstruction(int parent[], int source, int destination){
+        solutionPath = new ArrayList<>();
         int index = destination;
         if(source == destination)
             solutionPath.add(destination);
@@ -52,34 +81,6 @@ public class DijkstraAlgorithm {
         System.out.println("Shortest path: " + solutionPath);
         return solutionPath;
     }
-
-
-    public int[] dijkstra(int matrix[][]) {
-        int distance[] = new int[numberOfVertex];
-        Boolean processedVertex[] = new Boolean[numberOfVertex];
-        int previous[] = new int[numberOfVertex];
-        for (int i = 0; i < numberOfVertex; i++) {
-            distance[i] = Integer.MAX_VALUE;
-            processedVertex[i] = false;
-            previous[i] = -1;
-        }
-        distance[sourceVertex] = 0;
-        for (int vertex = 0; vertex < numberOfVertex - 1; vertex++) {  // dla ostatniego nie sprawdzam
-            //if(vertex == destinationVertex) break;
-            int u = findMinimalDistanceIndex(distance, processedVertex);
-            processedVertex[u] = true;
-            for (int v = 0; v < numberOfVertex; v++) {  // relaksacja
-                if (!processedVertex[v] && matrix[u][v] != 0 && distance[u] != Integer.MAX_VALUE &&
-                        distance[u] + matrix[u][v] < distance[v]) {
-                    distance[v] = distance[u] + matrix[u][v];
-                    previous[v] = u;
-                }
-            }
-        }
-        pathReconstruction(previous,sourceVertex,destinationVertex);
-        return previous;
-    }
-
 
     public List<Integer> getSolutionPath() {
         return solutionPath;

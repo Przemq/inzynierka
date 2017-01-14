@@ -75,8 +75,7 @@ public class ViewResolver extends View {
         points = new ArrayList<>();
         connections = new ArrayList<>();
 
-        parseJSON(readJSONFromFIle("testowyJSON"));
-        System.out.println("JSON" + readJSONFromFIle("testowyJSON"));
+        parseJSON(readJSONFromFIle("configuration"));
         reindex();
     }
 
@@ -124,7 +123,7 @@ public class ViewResolver extends View {
         }
     }
 
-    public void detectTouchedPoint(float x, float y) {
+    public void detectTouchPoint(float x, float y) {
         Point closestPoint = null;
         float distance = getWidth() * getHeight();
 
@@ -146,13 +145,10 @@ public class ViewResolver extends View {
                 clickedPoints.get(0).setSelected(false);
                 clickedPoints.remove(0);
                 destination = clickedPoints.get(1);
-                //System.out.println("I am i the loop");
             }
             source = clickedPoints.get(0);
             source.setSelected(true);
             destination.setSelected(true);
-
-            // System.out.println("S: " + source.getId() + " D: " + destination.getId());
         }
         if(clickedPoints.get(0).getId() == clickedPoints.get(1).getId())
             showWarning("Source and Destination can't be the same points");
@@ -179,7 +175,6 @@ public class ViewResolver extends View {
         for (Point p : points) {
             if (p.getName().equals(pos)) {
                 positionn = p.getId();
-                // System.out.println("znalazłem: " + p.getName() + " id: " + p.getId());
                 break;
             }
         }
@@ -209,13 +204,11 @@ public class ViewResolver extends View {
         return pointsId;
     }
 
-    //wyznaczanie żródła i celu oraz ich kolorowanie
     private void markSourceAndDestination() {
         for (Point p : points) {
-            if (p.getId() == destination.getId() || p.getId() == source.getId())// czy są aktualnmie wybrane
+            if (p.getId() == destination.getId() || p.getId() == source.getId())
                 p.setSelected(true);
             else p.setSelected(false);
-
             if (p.getId() == source.getId()) {
                 p.setSource(true);
             } else p.setSource(false);
@@ -271,7 +264,7 @@ public class ViewResolver extends View {
         try {
             JSONObject receivedData = new JSONObject(json);
             JSONArray pointsArray = receivedData.getJSONArray("pointsArray");
-            JSONArray connectionsArr = receivedData.getJSONArray("connectionsArray");
+            JSONArray connectionsArray = receivedData.getJSONArray("connectionsArray");
 
             int[][] dijkstraGraph = new int[pointsArray.length()][pointsArray.length()];
             zerosTab(dijkstraGraph);
@@ -287,8 +280,8 @@ public class ViewResolver extends View {
                 points.add(pt);
             }
 
-            for (int i = 0; i < connectionsArr.length(); i++) {
-                JSONObject c = connectionsArr.getJSONObject(i);
+            for (int i = 0; i < connectionsArray.length(); i++) {
+                JSONObject c = connectionsArray.getJSONObject(i);
                 int from = c.getInt("source");
                 int to = c.getInt("destination");
                 Connection tmp = new Connection(from, to);
@@ -302,8 +295,7 @@ public class ViewResolver extends View {
             numberOfFloor = metaData.getInt("numberOfFloor");
 
             setSourceAndDestinationIfNull(0, 1);
-            dijkstraAlgorithm = new DijkstraAlgorithm(source.getId(), destination.getId(), pointsArray.length());
-            dijkstraAlgorithm.dijkstra(dijkstraGraph);
+            dijkstraAlgorithm = new DijkstraAlgorithm(source.getId(), destination.getId(), pointsArray.length(),dijkstraGraph);
             solutionPath = dijkstraAlgorithm.getSolutionPath();
 
         } catch (JSONException e) {
@@ -336,8 +328,6 @@ public class ViewResolver extends View {
         }
         this.floor = floor;
     }
-
-
 
     public boolean isShowAllConnections() {
         return showAllConnections;

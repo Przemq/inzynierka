@@ -52,7 +52,7 @@
             android:layout_alignLeft="@+id/button_up"
             android:layout_alignStart="@+id/button_up"
             android:layout_marginBottom="9dp"
-            android:background="@mipmap/ic_floor_down_grey"
+            android:background="@mipmap/ic_floor_down"
             android:id="@+id/button_down" />
 
         <TextView

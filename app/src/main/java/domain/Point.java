@@ -10,19 +10,21 @@ import android.view.View;
  * Created by Przemek on 31.05.2016.
  */
 public class Point extends View {
+    private String name;
     private int id;
     private int floor;
     private boolean isMiddleSource;
-    private String name;
+    private boolean isSelected;
+    private boolean isSource;
+    private boolean isDestination;
+
     public static final float EDGE_WIDTH = 2.0f;
     public static final boolean ANTI_ALIAS = true;
     public static final float TEXT_SIZE = 22f;
     public static final float RADIUS = 7f;
     public static final float LINE_WIDTH = 2.0f;
 
-    private boolean isSelected;
-    private boolean isSource;
-    private boolean isDestination;
+
     Paint pointStyle;
     Paint textStyle;
     Paint pointDestination;
@@ -122,6 +124,7 @@ public class Point extends View {
 
         this.floor = floor;
     }
+
     public String getName() {
         return name;
     }

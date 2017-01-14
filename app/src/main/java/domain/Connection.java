@@ -5,7 +5,7 @@ package domain;
  */
 
 public class Connection {
-     private int from;
+    private int from;
     private  int to;
 
     public Connection(int from, int to) {

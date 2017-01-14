@@ -46,7 +46,7 @@ public class SplashActivity extends Activity {
             new ServerRequest(ServiceType.GET_CONFIGURATION, new Parameters()).setServerRequestListener(new ServerRequest.ServerRequestListener() {
                 @Override
                 public void onSuccess(String json) {
-                    writeToSDFile("testowyJSON",json);
+                    writeToSDFile("configuration",json);
                     try {
                         JSONObject receivedData = new JSONObject(json);
                         JSONObject metaData = receivedData.getJSONObject("metaData");

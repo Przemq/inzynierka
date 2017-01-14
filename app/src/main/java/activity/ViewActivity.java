@@ -25,9 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.Objects;
 
-import domain.Point;
 import utils.IOHelper;
 import view.ViewResolver;
 
@@ -43,8 +41,6 @@ public class ViewActivity extends Activity {
 
     LinearLayout layout;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,10 +50,12 @@ public class ViewActivity extends Activity {
         Button button_source = (Button) findViewById(R.id.source_button);
         Button button_destination = (Button) findViewById(R.id.destination_button);
         Button button_show_all = (Button) findViewById(R.id.button_show_all);
+        if (floor == 1) button_down.setBackgroundDrawable(getResources().getDrawable(R.mipmap.ic_floor_down_grey));
+
         graphicsMap = new HashMap<>();
 
         try {
-            JSONObject json = new JSONObject( IOHelper.readJSONFromFIle("testowyJSON"));
+            JSONObject json = new JSONObject( IOHelper.readJSONFromFIle("configuration"));
             JSONObject metaData = json.getJSONObject("metaData");
             JSONArray graphicsNames =  metaData.getJSONArray("floorsImages");
             numberOfFloor = metaData.getInt("numberOfFloor");
@@ -85,12 +83,12 @@ public class ViewActivity extends Activity {
             public void onClick(View v) {
                 floor++;
                 if(floor >= numberOfFloor){
-                    floor = numberOfFloor;
                     v.setBackgroundDrawable(getResources().getDrawable(R.mipmap.ic_floor_up_grey));
+                    floor = numberOfFloor;
                 }
-                button_down.setBackgroundDrawable(getResources().getDrawable(R.mipmap.ic_floor_down));
+                else
+                    button_down.setBackgroundDrawable(getResources().getDrawable(R.mipmap.ic_floor_down));
                 viewResolver.setFloor(viewResolver.getFloor() + 1);
-               // setUserInfo(viewResolver.getUserInfo());
                 tv_floor.setText(String.valueOf(viewResolver.getFloor()));
                 layout.setBackgroundDrawable(setBackgroundFromSD(graphicsMap.get(floor)));
                 viewResolver.invalidate();
@@ -104,11 +102,11 @@ public class ViewActivity extends Activity {
                 if(floor <=1){
                     floor =1;
                     v.setBackgroundDrawable(getResources().getDrawable(R.mipmap.ic_floor_down_grey));
+                    button_up.setBackgroundDrawable(getResources().getDrawable(R.mipmap.ic_floor_up));
                 }
-                button_up.setBackgroundDrawable(getResources().getDrawable(R.mipmap.ic_floor_up));
-
+                else
+                    v.setBackgroundDrawable(getResources().getDrawable(R.mipmap.ic_floor_down));
                 viewResolver.setFloor(viewResolver.getFloor() - 1);
-               // setUserInfo(viewResolver.getUserInfo());
                 tv_floor.setText(String.valueOf(viewResolver.getFloor()));
                 layout.setBackgroundDrawable(setBackgroundFromSD(graphicsMap.get(floor)));
                 viewResolver.invalidate();
@@ -177,6 +175,7 @@ public class ViewActivity extends Activity {
                 .duration(1500)
                 .playOn(findViewById(R.id.button_up));
     }
+
     public void showDownPrompt(){
         YoYo.with(Techniques.Pulse)
                 .duration(1500)
@@ -222,8 +221,7 @@ public class ViewActivity extends Activity {
     public boolean onTouchEvent(MotionEvent event) {
         if(event.getAction() == MotionEvent.ACTION_DOWN){
             if(event.getY() < viewResolver.getHeight())
-                viewResolver.detectTouchedPoint(event.getX(),event.getY() - viewResolver.getY());
-            System.out.println("H: " + viewResolver.getHeight() + "W: " + viewResolver.getWidth());
+                viewResolver.detectTouchPoint(event.getX(),event.getY() - viewResolver.getY());
         }
         return super.onTouchEvent(event);
 
