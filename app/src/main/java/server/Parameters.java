@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 public class Parameters {
 
-   private HashMap<String, String> parameters = new HashMap<String, String>();
+   private HashMap<String, String> parameters = new HashMap<>();
 
     public Parameters addParam(String key, String value){
         parameters.put(key,value);
